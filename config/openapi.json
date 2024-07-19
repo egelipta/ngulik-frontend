@@ -1,0 +1,1343 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "BACKEND",
+    "description": "<a href=\"/redoc\" target=\"_blank\">redoc</a>",
+    "version": "6.3.5",
+    "x-logo": { "url": "/logo-teal.png" }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Home",
+        "description": "Home\n:param request:\n:return:",
+        "operationId": "home__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/user": {
+      "get": {
+        "tags": ["User Management"],
+        "summary": "user list",
+        "description": "Get all administrators\n:return:",
+        "operationId": "user_list_api_v1_admin_user_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": { "title": "Pagesize", "type": "integer", "default": 10 },
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Current", "type": "integer", "default": 1 },
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Username", "type": "string" },
+            "name": "username",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "User Phone", "type": "string" },
+            "name": "user_phone",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "User Status", "type": "boolean" },
+            "name": "user_status",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Create Time", "type": "array", "items": { "type": "string" } },
+            "name": "create_time",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UserListData" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["user_query"] }]
+      },
+      "put": {
+        "tags": ["User Management"],
+        "summary": "User modification",
+        "description": "Update user information\n:param post:\n:return:",
+        "operationId": "user_update_api_v1_admin_user_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateUser" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["user_update"] }]
+      },
+      "post": {
+        "tags": ["User Management"],
+        "summary": "User add",
+        "description": "Create users\n:param post: CreateUser\n:return:",
+        "operationId": "user_add_api_v1_admin_user_post",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateUser" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["user_add"] }]
+      },
+      "delete": {
+        "tags": ["User Management"],
+        "summary": "User delete",
+        "description": "delete users\n:param req:\n:param user_id: int\n:return:",
+        "operationId": "user_del_api_v1_admin_user_delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "User Id", "type": "integer" },
+            "name": "user_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["user_delete"] }]
+      }
+    },
+    "/api/v1/admin/user/set/role": {
+      "put": {
+        "tags": ["User Management"],
+        "summary": "Role Assignments",
+        "description": "Role Assignments\n:param post:\n:return:",
+        "operationId": "set_role_api_v1_admin_user_set_role_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SetRole" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["user_role"] }]
+      }
+    },
+    "/api/v1/admin/user/info": {
+      "get": {
+        "tags": ["User Management"],
+        "summary": "Get the current user information",
+        "description": "Get the current login user information\n:return:",
+        "operationId": "user_info_api_v1_admin_user_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CurrentUser" } }
+            }
+          }
+        },
+        "security": [{ "User": [] }]
+      },
+      "put": {
+        "tags": ["User Management"],
+        "summary": "Basic user information modification",
+        "description": "edit personal information\n:param req:\n:param post:\n:return:",
+        "operationId": "update_user_info_api_v1_admin_user_info_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateUserInfo" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": [] }]
+      }
+    },
+    "/api/v1/admin/user/account/login": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "user login",
+        "description": "user login\n:param req:\n:param post:\n:return: jwt token",
+        "operationId": "account_login_api_v1_admin_user_account_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AccountLogin" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UserLogin" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/user/access/log": {
+      "get": {
+        "tags": ["User Management"],
+        "summary": "User access record",
+        "description": "Query current user access record\n:param req:\n:return:",
+        "operationId": "get_access_log_api_v1_admin_user_access_log_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "User": [] }]
+      }
+    },
+    "/api/v1/admin/user/modify/mobile": {
+      "put": {
+        "tags": ["User Management"],
+        "summary": "User mobile phone number modification",
+        "description": "Modify the binding mobile phone number\n:param req:\n:param post:\n:return:",
+        "operationId": "update_user_info_api_v1_admin_user_modify_mobile_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ModifyMobile" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": [] }]
+      }
+    },
+    "/api/v1/admin/user/avatar/upload": {
+      "put": {
+        "tags": ["User Management"],
+        "summary": "Avatar modification",
+        "description": "Avatar upload\n:param req:\n:param avatar:\n:return:",
+        "operationId": "avatar_upload_api_v1_admin_user_avatar_upload_put",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_avatar_upload_api_v1_admin_user_avatar_upload_put"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": [] }]
+      }
+    },
+    "/api/v1/admin/user/photo/upload_tes": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "Photo real cuy",
+        "operationId": "download_image_api_v1_admin_user_photo_upload_tes_post",
+        "parameters": [
+          { "required": true, "schema": { "title": "Url" }, "name": "url", "in": "query" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/user/data-user": {
+      "get": {
+        "tags": ["User Management"],
+        "summary": "Data User",
+        "operationId": "get_data_user_api_v1_admin_user_data_user_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/role/all": {
+      "get": {
+        "tags": ["Role management"],
+        "summary": "All characters are dedicated to pull off options",
+        "operationId": "all_roles_options_api_v1_admin_role_all_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": { "title": "User Id", "type": "integer" },
+            "name": "user_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["user_role"] }]
+      }
+    },
+    "/api/v1/admin/role": {
+      "get": {
+        "tags": ["Role management"],
+        "summary": "Corner list",
+        "description": "Corner list\n:param role_status:\n:param pageSize:\n:param current:\n:param role_name:\n:param create_time:\n:return:",
+        "operationId": "get_all_role_api_v1_admin_role_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": { "title": "Pagesize", "type": "integer", "default": 10 },
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Current", "type": "integer", "default": 1 },
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Role Name", "type": "string" },
+            "name": "role_name",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Role Status", "type": "boolean" },
+            "name": "role_status",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Create Time", "type": "array", "items": { "type": "string" } },
+            "name": "create_time",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/RoleList" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["role_query"] }]
+      },
+      "put": {
+        "tags": ["Role management"],
+        "summary": "Role modification",
+        "description": "Update role\n:param post:\n:return:",
+        "operationId": "update_role_api_v1_admin_role_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateRole" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["role_update"] }]
+      },
+      "post": {
+        "tags": ["Role management"],
+        "summary": "Character add",
+        "description": "Creating a Role\n:param post: CreateRole\n:return:",
+        "operationId": "create_role_api_v1_admin_role_post",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateRole" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["role_add"] }]
+      },
+      "delete": {
+        "tags": ["Role management"],
+        "summary": "Character delete",
+        "description": "Delete the role\n:param role_id:\n:return:",
+        "operationId": "delete_role_api_v1_admin_role_delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Role Id", "type": "integer" },
+            "name": "role_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["role_delete"] }]
+      }
+    },
+    "/api/v1/admin/access": {
+      "get": {
+        "tags": ["authority management"],
+        "summary": "Permission query",
+        "description": "Get all permissions\n:return:",
+        "operationId": "get_all_access_api_v1_admin_access_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Role Id", "type": "integer" },
+            "name": "role_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["role_access"] }]
+      },
+      "put": {
+        "tags": ["authority management"],
+        "summary": "Permission settings",
+        "description": "Set role permission\n:param post:\n:return:",
+        "operationId": "set_role_access_api_v1_admin_access_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SetAccess" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/BaseResp" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "User": ["role_access"] }]
+      },
+      "post": {
+        "tags": ["authority management"],
+        "summary": "权限创建",
+        "description": "创建权限\n:param post: CreateAccess\n:return:",
+        "operationId": "create_access_api_v1_admin_access_post",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateAccess" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/BaseResp" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tugas/tugas": {
+      "get": {
+        "tags": ["Tugas"],
+        "summary": "Tugas List",
+        "description": "Get All Tugass\n:return:",
+        "operationId": "tugas_list_api_v1_tugas_tugas_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": { "title": "Pagesize", "type": "integer", "default": 10 },
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Current", "type": "integer", "default": 1 },
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Name", "type": "string" },
+            "name": "name",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Start", "type": "string" },
+            "name": "start",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "End", "type": "string" },
+            "name": "end",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Progress", "type": "string" },
+            "name": "progress",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Tipe", "type": "string" },
+            "name": "tipe",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Project", "type": "string" },
+            "name": "project",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Dependencies", "type": "string" },
+            "name": "dependencies",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Create Time", "type": "string" },
+            "name": "create_time",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": { "title": "Update Time", "type": "string" },
+            "name": "update_time",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/TugasListData" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tugas"],
+        "summary": "Tugas Add",
+        "description": "Tugas Add\n:param post: CreateTugas\n:return:",
+        "operationId": "tugas_add_api_v1_tugas_tugas_post",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateTugas" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tugas/tugas/gantt-task": {
+      "get": {
+        "tags": ["Tugas"],
+        "summary": "Data Gantt Task",
+        "operationId": "gantt_task_api_v1_tugas_tugas_gantt_task_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/tugas/tugas/project": {
+      "get": {
+        "tags": ["Tugas"],
+        "summary": "Data Project",
+        "operationId": "project_api_v1_tugas_tugas_project_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/tugas/tugas/data-subproject": {
+      "get": {
+        "tags": ["Tugas"],
+        "summary": "Data Sub Project",
+        "operationId": "data_subproject_api_v1_tugas_tugas_data_subproject_get",
+        "parameters": [
+          { "required": true, "schema": { "title": "Id" }, "name": "id", "in": "query" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tugas/tugas/hapus-data": {
+      "delete": {
+        "tags": ["Tugas"],
+        "summary": "Hapus Data",
+        "description": "Hapus Data\n:param req:\n:return:",
+        "operationId": "hapus_data_api_v1_tugas_tugas_hapus_data_delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Id", "type": "integer" },
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tugas/tugas/update": {
+      "put": {
+        "tags": ["Tugas"],
+        "summary": "Update Tugas",
+        "description": "Update tugas information\n:param post:\n:return:",
+        "operationId": "tugas_update_api_v1_tugas_tugas_update_put",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTugas" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/heat_map/heat_map/heat-map": {
+      "get": {
+        "tags": ["Heat Map"],
+        "summary": "Get Heatmap List",
+        "operationId": "get_heatmap_list_api_v1_heat_map_heat_map_heat_map_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/heat_map/heat_map/heat-map-lantai1": {
+      "get": {
+        "tags": ["Heat Map"],
+        "summary": "Get Heatmap Lantai1 List",
+        "operationId": "get_heatmap_lantai1_list_api_v1_heat_map_heat_map_heat_map_lantai1_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/heat_map/heat_map/heat-map-lantai2": {
+      "get": {
+        "tags": ["Heat Map"],
+        "summary": "Get Heatmap Lantai2 List",
+        "operationId": "get_heatmap_lantai2_list_api_v1_heat_map_heat_map_heat_map_lantai2_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/heat_map/heat_map/heat-map-lantai3": {
+      "get": {
+        "tags": ["Heat Map"],
+        "summary": "Get Heatmap Lantai3 List",
+        "operationId": "get_heatmap_lantai3_list_api_v1_heat_map_heat_map_heat_map_lantai3_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/heat_map/heat_map/heat-map-datacenter": {
+      "get": {
+        "tags": ["Heat Map"],
+        "summary": "Get Heatmap Datacenter List",
+        "operationId": "get_heatmap_datacenter_list_api_v1_heat_map_heat_map_heat_map_datacenter_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccessToken": {
+        "title": "AccessToken",
+        "type": "object",
+        "properties": {
+          "token": { "title": "Token", "type": "string" },
+          "expires_in": { "title": "Expires In", "type": "integer" }
+        }
+      },
+      "AccountLogin": {
+        "title": "AccountLogin",
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "maxLength": 255,
+            "minLength": 3,
+            "type": "string",
+            "description": "username"
+          },
+          "password": {
+            "title": "Password",
+            "maxLength": 255,
+            "minLength": 6,
+            "type": "string",
+            "description": "password"
+          },
+          "mobile": { "title": "Mobile", "type": "string", "description": "phone number" },
+          "captcha": {
+            "title": "Captcha",
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "6-digit verification code"
+          }
+        }
+      },
+      "BaseResp": {
+        "title": "BaseResp",
+        "required": ["code", "message", "data"],
+        "type": "object",
+        "properties": {
+          "code": { "title": "Code", "type": "integer", "description": "status code" },
+          "message": { "title": "Message", "type": "string", "description": "message" },
+          "data": { "title": "Data", "type": "array", "items": {}, "description": "data" }
+        }
+      },
+      "Body_avatar_upload_api_v1_admin_user_avatar_upload_put": {
+        "title": "Body_avatar_upload_api_v1_admin_user_avatar_upload_put",
+        "required": ["avatar"],
+        "type": "object",
+        "properties": { "avatar": { "title": "Avatar", "type": "string", "format": "binary" } }
+      },
+      "CreateAccess": {
+        "title": "CreateAccess",
+        "type": "object",
+        "properties": {
+          "access_name": {
+            "title": "Access Name",
+            "type": "string",
+            "description": "Permission name",
+            "default": "test"
+          },
+          "scopes": {
+            "title": "Scopes",
+            "type": "string",
+            "description": "Permissions",
+            "default": "test"
+          },
+          "parent_id": { "title": "Parent Id", "type": "integer", "default": 0 },
+          "is_check": { "title": "Is Check", "type": "boolean", "default": false },
+          "is_menu": { "title": "Is Menu", "type": "boolean", "default": false }
+        }
+      },
+      "CreateRole": {
+        "title": "CreateRole",
+        "required": ["role_name"],
+        "type": "object",
+        "properties": {
+          "role_name": { "title": "Role Name", "maxLength": 25, "minLength": 3, "type": "string" },
+          "role_status": { "title": "Role Status", "type": "boolean", "default": false },
+          "role_desc": { "title": "Role Desc", "maxLength": 255, "type": "string" }
+        }
+      },
+      "CreateTugas": {
+        "title": "CreateTugas",
+        "required": ["name", "start", "end", "progress", "tipe"],
+        "type": "object",
+        "properties": {
+          "name": { "title": "Name", "maxLength": 255, "type": "string" },
+          "start": { "title": "Start", "type": "string", "format": "date-time" },
+          "end": { "title": "End", "type": "string", "format": "date-time" },
+          "progress": { "title": "Progress", "type": "integer" },
+          "tipe": { "title": "Tipe", "maxLength": 255, "type": "string" },
+          "project": { "title": "Project", "maxLength": 255, "type": "string" },
+          "dependencies": { "title": "Dependencies", "maxLength": 255, "type": "string" }
+        }
+      },
+      "CreateUser": {
+        "title": "CreateUser",
+        "required": ["username", "password", "nickname"],
+        "type": "object",
+        "properties": {
+          "username": { "title": "Username", "maxLength": 255, "minLength": 3, "type": "string" },
+          "password": { "title": "Password", "maxLength": 255, "minLength": 6, "type": "string" },
+          "user_phone": { "title": "User Phone", "type": "string" },
+          "user_status": { "title": "User Status", "type": "boolean" },
+          "remarks": { "title": "Remarks", "type": "string" },
+          "roles": { "title": "Roles", "type": "array", "items": { "type": "integer" } },
+          "nickname": { "title": "Nickname", "maxLength": 25, "minLength": 3, "type": "string" },
+          "user_type": { "title": "User Type", "type": "boolean" }
+        }
+      },
+      "CurrentUser": {
+        "title": "CurrentUser",
+        "required": ["code", "message", "data"],
+        "type": "object",
+        "properties": {
+          "code": { "title": "Code", "type": "integer", "description": "status code" },
+          "message": { "title": "Message", "type": "string", "description": "message" },
+          "data": { "$ref": "#/components/schemas/UserInfo" }
+        }
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ValidationError" }
+          }
+        }
+      },
+      "ModifyMobile": {
+        "title": "ModifyMobile",
+        "required": ["mobile", "captcha"],
+        "type": "object",
+        "properties": {
+          "mobile": { "title": "Mobile", "type": "string", "description": "phone number" },
+          "captcha": {
+            "title": "Captcha",
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "6-digit verification code"
+          }
+        }
+      },
+      "RoleItem": {
+        "title": "RoleItem",
+        "required": ["id", "key", "role_name", "create_time", "update_time"],
+        "type": "object",
+        "properties": {
+          "id": { "title": "Id", "type": "integer" },
+          "key": { "title": "Key", "type": "integer" },
+          "role_name": { "title": "Role Name", "type": "string" },
+          "role_status": { "title": "Role Status", "type": "boolean" },
+          "role_desc": { "title": "Role Desc", "type": "string" },
+          "create_time": { "title": "Create Time", "type": "string", "format": "date-time" },
+          "update_time": { "title": "Update Time", "type": "string", "format": "date-time" }
+        }
+      },
+      "RoleList": {
+        "title": "RoleList",
+        "required": ["success", "data", "total"],
+        "type": "object",
+        "properties": {
+          "success": { "title": "Success", "type": "boolean", "description": "status code" },
+          "data": {
+            "title": "Data",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/RoleItem" }
+          },
+          "total": { "title": "Total", "type": "integer", "description": "total" }
+        }
+      },
+      "SetAccess": {
+        "title": "SetAccess",
+        "required": ["role_id"],
+        "type": "object",
+        "properties": {
+          "role_id": { "title": "Role Id", "type": "integer" },
+          "access": {
+            "title": "Access",
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Permissions",
+            "default": []
+          }
+        }
+      },
+      "SetRole": {
+        "title": "SetRole",
+        "required": ["user_id"],
+        "type": "object",
+        "properties": {
+          "user_id": { "title": "User Id", "type": "integer" },
+          "roles": {
+            "title": "Roles",
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Role",
+            "default": []
+          }
+        }
+      },
+      "TugasItem": {
+        "title": "TugasItem",
+        "required": [
+          "name",
+          "start",
+          "end",
+          "progress",
+          "tipe",
+          "id",
+          "key",
+          "create_time",
+          "update_time"
+        ],
+        "type": "object",
+        "properties": {
+          "name": { "title": "Name", "maxLength": 255, "type": "string" },
+          "start": { "title": "Start", "type": "string", "format": "date-time" },
+          "end": { "title": "End", "type": "string", "format": "date-time" },
+          "progress": { "title": "Progress", "type": "integer" },
+          "tipe": { "title": "Tipe", "maxLength": 255, "type": "string" },
+          "project": { "title": "Project", "maxLength": 255, "type": "string" },
+          "dependencies": { "title": "Dependencies", "maxLength": 255, "type": "string" },
+          "id": { "title": "Id", "type": "integer" },
+          "key": { "title": "Key", "type": "integer" },
+          "create_time": { "title": "Create Time", "type": "string", "format": "date-time" },
+          "update_time": { "title": "Update Time", "type": "string", "format": "date-time" }
+        }
+      },
+      "TugasListData": {
+        "title": "TugasListData",
+        "required": ["success", "data", "total"],
+        "type": "object",
+        "properties": {
+          "success": { "title": "Success", "type": "boolean", "description": "status code" },
+          "data": {
+            "title": "Data",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TugasItem" }
+          },
+          "total": { "title": "Total", "type": "integer", "description": "total" }
+        }
+      },
+      "UpdateRole": {
+        "title": "UpdateRole",
+        "required": ["id", "role_name"],
+        "type": "object",
+        "properties": {
+          "id": { "title": "Id", "type": "integer" },
+          "role_name": { "title": "Role Name", "type": "string" },
+          "role_status": { "title": "Role Status", "type": "boolean" },
+          "role_desc": { "title": "Role Desc", "type": "string" }
+        }
+      },
+      "UpdateTugas": {
+        "title": "UpdateTugas",
+        "required": ["name", "start", "end", "progress", "tipe", "id"],
+        "type": "object",
+        "properties": {
+          "name": { "title": "Name", "maxLength": 255, "type": "string" },
+          "start": { "title": "Start", "type": "string", "format": "date-time" },
+          "end": { "title": "End", "type": "string", "format": "date-time" },
+          "progress": { "title": "Progress", "type": "integer" },
+          "tipe": { "title": "Tipe", "maxLength": 255, "type": "string" },
+          "project": { "title": "Project", "maxLength": 255, "type": "string" },
+          "dependencies": { "title": "Dependencies", "maxLength": 255, "type": "string" },
+          "id": { "title": "Id", "type": "integer" }
+        }
+      },
+      "UpdateUser": {
+        "title": "UpdateUser",
+        "required": ["id"],
+        "type": "object",
+        "properties": {
+          "id": { "title": "Id", "type": "integer" },
+          "username": { "title": "Username", "maxLength": 25, "minLength": 3, "type": "string" },
+          "password": { "title": "Password", "maxLength": 255, "minLength": 6, "type": "string" },
+          "user_phone": { "title": "User Phone", "type": "string" },
+          "user_status": { "title": "User Status", "type": "boolean" },
+          "remarks": { "title": "Remarks", "type": "string" }
+        }
+      },
+      "UpdateUserInfo": {
+        "title": "UpdateUserInfo",
+        "type": "object",
+        "properties": {
+          "nickname": { "title": "Nickname", "type": "string" },
+          "user_email": { "title": "User Email", "type": "string" },
+          "header_img": { "title": "Header Img", "type": "string" },
+          "user_phone": { "title": "User Phone", "type": "string", "description": "phone number" },
+          "password": {
+            "title": "Password",
+            "maxLength": 255,
+            "minLength": 6,
+            "type": "string",
+            "description": "password"
+          }
+        }
+      },
+      "UserInfo": {
+        "title": "UserInfo",
+        "required": ["username", "user_type", "user_status", "sex"],
+        "type": "object",
+        "properties": {
+          "username": { "title": "Username", "type": "string" },
+          "age": { "title": "Age", "type": "integer" },
+          "user_type": { "title": "User Type", "type": "boolean" },
+          "nickname": { "title": "Nickname", "type": "string" },
+          "user_phone": { "title": "User Phone", "type": "string" },
+          "user_email": { "title": "User Email", "type": "string" },
+          "full_name": { "title": "Full Name", "type": "string" },
+          "scopes": { "title": "Scopes", "type": "array", "items": { "type": "string" } },
+          "user_status": { "title": "User Status", "type": "boolean" },
+          "header_img": { "title": "Header Img", "type": "string" },
+          "sex": { "title": "Sex", "type": "integer" }
+        }
+      },
+      "UserListData": {
+        "title": "UserListData",
+        "required": ["success", "data", "total"],
+        "type": "object",
+        "properties": {
+          "success": { "title": "Success", "type": "boolean", "description": "status code" },
+          "data": {
+            "title": "Data",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UserListItem" }
+          },
+          "total": { "title": "Total", "type": "integer", "description": "total" }
+        }
+      },
+      "UserListItem": {
+        "title": "UserListItem",
+        "required": [
+          "key",
+          "id",
+          "username",
+          "user_type",
+          "user_status",
+          "sex",
+          "create_time",
+          "update_time"
+        ],
+        "type": "object",
+        "properties": {
+          "key": { "title": "Key", "type": "integer" },
+          "id": { "title": "Id", "type": "integer" },
+          "username": { "title": "Username", "type": "string" },
+          "age": { "title": "Age", "type": "integer" },
+          "user_type": { "title": "User Type", "type": "boolean" },
+          "nickname": { "title": "Nickname", "type": "string" },
+          "user_phone": { "title": "User Phone", "type": "string" },
+          "user_email": { "title": "User Email", "type": "string" },
+          "full_name": { "title": "Full Name", "type": "string" },
+          "user_status": { "title": "User Status", "type": "boolean" },
+          "header_img": { "title": "Header Img", "type": "string" },
+          "sex": { "title": "Sex", "type": "integer" },
+          "remarks": { "title": "Remarks", "type": "string" },
+          "create_time": { "title": "Create Time", "type": "string", "format": "date-time" },
+          "update_time": { "title": "Update Time", "type": "string", "format": "date-time" }
+        }
+      },
+      "UserLogin": {
+        "title": "UserLogin",
+        "required": ["code", "message", "data"],
+        "type": "object",
+        "properties": {
+          "code": { "title": "Code", "type": "integer", "description": "status code" },
+          "message": { "title": "Message", "type": "string", "description": "message" },
+          "data": { "$ref": "#/components/schemas/AccessToken" }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": ["loc", "msg", "type"],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] }
+          },
+          "msg": { "title": "Message", "type": "string" },
+          "type": { "title": "Error Type", "type": "string" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "User": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": { "is_admin": "Super administrator", "not_admin": "Ordinary administrator" },
+            "tokenUrl": "/api/v1/test/oath2"
+          }
+        }
+      }
+    }
+  }
+}

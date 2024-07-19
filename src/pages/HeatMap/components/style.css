@@ -1,0 +1,13 @@
+.hoverable:hover {
+  fill: #f2f59f;
+}
+.no-highlight {
+  -webkit-tap-highlight-color: transparent;
+  outline: none; /* Menghilangkan outline saat elemen diklik */
+}
+
+/* Menonaktifkan highlight pada semua elemen */
+* {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
