@@ -107,6 +107,14 @@ export default [
       },
     ],
   },
+
+  {
+    path: '/three-js',
+    name: 'THREE JS',
+    icon: 'HeatMapOutlined',
+    component: './ThreeJS',
+  },
+
   {
     path: '/',
     redirect: '/welcome',
