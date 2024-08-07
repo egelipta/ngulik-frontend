@@ -8,6 +8,7 @@ import * as roleManagement from './roleManagement';
 import * as authorityManagement from './authorityManagement';
 import * as tugas from './tugas';
 import * as heatMap from './heatMap';
+import * as rackServer from './rackServer';
 export default {
   home,
   userManagement,
@@ -15,4 +16,5 @@ export default {
   authorityManagement,
   tugas,
   heatMap,
+  rackServer,
 };

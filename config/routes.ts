@@ -51,8 +51,8 @@ export default [
   {
     path: '/gantt-task',
     name: 'gantt',
-    icon: 'user',
-    access: 'user_m',
+    icon: 'UnorderedListOutlined',
+    // access: 'user_m',
     routes: [
       {
         name: 'data-task',
@@ -111,8 +111,14 @@ export default [
   {
     path: '/three-js',
     name: 'THREE JS',
-    icon: 'HeatMapOutlined',
+    icon: 'InboxOutlined',
     component: './ThreeJS',
+  },
+  {
+    path: '/echarts',
+    name: 'eCharts',
+    icon: 'PieChartOutlined',
+    component: './ECharts',
   },
 
   {

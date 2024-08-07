@@ -1,0 +1,25 @@
+.gui-info {
+  position: absolute;
+  top: 32px;
+  left: 40px;
+  z-index: 1;
+}
+
+.gui-widget-background {
+  position: absolute;
+  top: 32px;
+  left: 40px;
+  z-index: 1;
+  background: linear-gradient(to right, rgba(15, 52, 112, 0.5), rgba(28, 181, 224, 0.3));
+
+  /* background-color: rgb(255, 255, 255, 0.2); */
+  width: 245px;
+  height: 800px;
+}
+
+.gui-widget-switch {
+  position: absolute;
+  top: 260px;
+  left: 140px;
+  z-index: 1;
+}
