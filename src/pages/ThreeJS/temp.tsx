@@ -49,14 +49,12 @@ export default memo(() => {
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
 
-        const gridY = -1800;
-        const gap = 20;
         // ============================================RACK SERVER=============================================
         // Function to create walls
         const createWall = (width: number, height: number, depth: number, x: number, y: number, z: number) => {
             const geometryRack = new THREE.BoxGeometry(width, height, depth);
             const materialRack = new THREE.MeshBasicMaterial({
-                color: '#000', transparent: true, opacity: 0.3, side: THREE.DoubleSide,
+                color: '#000', transparent: true, opacity: 0.9, side: THREE.DoubleSide,
                 depthTest: true, wireframe: false
             });
             const dinding = new THREE.Mesh(geometryRack, materialRack);
@@ -67,15 +65,15 @@ export default memo(() => {
         // Create rack groups
         const rackGroups: THREE.Group[] = [];
 
-        data.forEach(rg => {
+        data.forEach(r => {
             const rackGroup = new THREE.Group();
             // rackGroup.name = r.uuid;
 
-            const sisiKiri = createWall(gap, rg.height, rg.depth, -rg.width / 2 + (gap / 2), 0 - (gap / 2), 0);
-            const sisiKanan = createWall(gap, rg.height, rg.depth, rg.width / 2 - (gap / 2), 0 - (gap / 2), 0);
-            const sisiAtas = createWall(rg.width, gap, rg.depth, 0, rg.height / 2 - (2 * (gap / 2)), 0);
-            const sisBawah = createWall(rg.width, gap, rg.depth, 0, -rg.height / 2, 0);
-            // const sisiBelakang = createWall(rg.width, rg.height, gap, 0, 0, -rg.depth / 2);
+            const sisiKiri = createWall(30, r.height, r.depth, -r.width / 2 + 15, 0 - 15, 0);
+            const sisiKanan = createWall(30, r.height, r.depth, r.width / 2 - 15, 0 - 15, 0);
+            const sisiAtas = createWall(r.width, 30, r.depth, 0, r.height / 2 - (2 * 15), 0);
+            const sisBawah = createWall(r.width, 30, r.depth, 0, -r.height / 2, 0);
+            // const sisiBelakang = createWall(r.width, r.height, 30, 0, 0, -r.depth / 2);
 
             rackGroup.add(sisiKiri);
             rackGroup.add(sisiKanan);
@@ -83,20 +81,72 @@ export default memo(() => {
             rackGroup.add(sisBawah);
             // rackGroup.add(sisiBelakang);
 
-            rackGroup.position.set(rg.x, gridY + rg.height / 2, rg.z);
+            rackGroup.position.set(r.x, r.y, r.z);
             scene.add(rackGroup);
             rackGroups.push(rackGroup);
 
             // Map the rackGroup to its data
-            rackGroupDataMap.current.set(rackGroup, rg);
+            rackGroupDataMap.current.set(rackGroup, r);
         });
         // ============================================RACK SERVER=============================================
+
+        // ============================================DEVICE=============================================
+        const dataDevice = [
+            {
+                id: 1,
+                name: 'Device 1',
+                image: '/device.png',
+                posx: 350,
+                posy: -910,
+                posz: -300,
+                width: 550,
+                height: 45 * 2,
+                depth: 600
+            }
+        ]
+
+        const textureLoader = new THREE.TextureLoader();
+        dataDevice.forEach((conf) => {
+            const texture = textureLoader.load(conf.image);
+            const geometry = new THREE.BoxGeometry(conf.width, conf.height, conf.depth);
+            const material = new THREE.MeshBasicMaterial({ color: '#5c5b5b' });
+            const device = new THREE.MeshBasicMaterial({ map: texture })
+
+            const materials = [
+                material, // kanan
+                material, // kiri
+                material, // atas
+                material, // bawah
+                device, // depan
+                material, // belakang
+            ]
+
+
+            const cube = new THREE.Mesh(geometry, materials);
+            cube.position.set(conf.posx, conf.posy, conf.posz);
+
+            // Membuat edge geometry dan outline material
+            const edge = new THREE.EdgesGeometry(geometry);
+            const outline = new THREE.LineBasicMaterial({
+                color: 0x000,
+                linewidth: 1,
+            });
+
+            const outlineRack = new THREE.LineSegments(edge, outline);
+            cube.add(outlineRack);
+            scene.add(cube);
+        })
+
+
+
+
+        // ============================================DEVICE=============================================
 
         // Grid Helper setup
         const helper = new GridHelper(8500, 100);
         helper.material.opacity = 0.25;
         helper.material.transparent = true;
-        helper.position.set(0, gridY, 0);
+        helper.position.set(0, -960, 0);
         scene.add(helper);
 
         // Animation loop
