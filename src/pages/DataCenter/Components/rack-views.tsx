@@ -4,16 +4,11 @@ import * as THREE from 'three';
 import { GridHelper } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { dataRackServerApiV1RackServerRackServerDataRackServerGet } from '@/services/pjvms/rackServer';
-import { Button, Tooltip } from 'antd';
-import gambar from '../../../public/device.png';
 
 export default memo(() => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [data, setData] = useState<any[]>([]);
-    const raycaster = useRef(new THREE.Raycaster());
-    const mouse = useRef(new THREE.Vector2());
     const rackGroupDataMap = useRef<Map<THREE.Group, any>>(new Map());
-    const hoveredObject = useRef<THREE.Group | null>(null); // Track the currently hovered object
 
     const getData = async () => {
         try {
@@ -150,6 +145,54 @@ export default memo(() => {
             rackGroupDataMap.current.set(rackGroup, rg);
         });
         // ============================================RACK SERVER=============================================
+
+        // ============================================DEVICE=============================================
+        const dataDevice = [
+            {
+                id: 1,
+                name: 'Device 1',
+                image: '/device.png',
+                posx: -700,
+                posy: -190,
+                posz: 300,
+                width: 600,
+                height: 45 * 2,
+                depth: 600
+            }
+        ]
+
+        const textureLoader = new THREE.TextureLoader();
+        dataDevice.forEach((conf) => {
+            const texture = textureLoader.load(conf.image);
+            const geometry = new THREE.BoxGeometry(conf.width, conf.height, conf.depth);
+            const material = new THREE.MeshBasicMaterial({ color: '#5c5b5b' });
+            const device = new THREE.MeshBasicMaterial({ map: texture })
+
+            const materials = [
+                material, // kanan
+                material, // kiri
+                material, // atas
+                material, // bawah
+                device, // depan
+                material, // belakang
+            ]
+
+
+            const cube = new THREE.Mesh(geometry, materials);
+            cube.position.set(conf.posx, conf.posy, conf.posz);
+
+            // Membuat edge geometry dan outline material
+            const edge = new THREE.EdgesGeometry(geometry);
+            const outline = new THREE.LineBasicMaterial({
+                color: 0x000,
+                linewidth: 1,
+            });
+
+            const outlineRack = new THREE.LineSegments(edge, outline);
+            cube.add(outlineRack);
+            scene.add(cube);
+        })
+        // ============================================DEVICE=============================================
 
         // Grid Helper setup
         const helper = new GridHelper(15000, 100);

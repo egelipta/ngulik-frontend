@@ -63,4 +63,10 @@ export default {
 
   // =====================
   'menu.heat-map': 'Heat Map',
+
+  // =====================
+  'menu.datacenter': 'Data Center',
+  'menu.datacenter.datarack': 'Server Rack Data',
+  'menu.datacenter.viewrack': 'Server Rack View',
+  'menu.datacenter.riset': 'Research',
 };

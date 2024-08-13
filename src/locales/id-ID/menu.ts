@@ -97,4 +97,10 @@ export default {
 
   // =====================
   'menu.heat-map': 'Peta Panas',
+
+  // =====================
+  'menu.datacenter': 'Pusat Data',
+  'menu.datacenter.datarack': 'Data Rak Server',
+  'menu.datacenter.viewrack': 'Tampilan Rak Server',
+  'menu.datacenter.riset': 'Riset',
 };

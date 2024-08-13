@@ -74,6 +74,33 @@ export default [
       // },
     ],
   },
+
+  {
+    path: '/data-center',
+    name: 'datacenter',
+    icon: 'DatabaseOutlined',
+    // access: 'user_m',
+    routes: [
+      {
+        name: 'datarack',
+        path: '/data-center/index',
+        // access: 'user_m',
+        component: './DataCenter/index',
+      },
+      {
+        name: 'viewrack',
+        path: '/data-center/view',
+        // access: 'user_m',
+        component: './DataCenter/Components/rack-views',
+      },
+      {
+        name: 'riset',
+        path: '/data-center/riset',
+        // access: 'user_m',
+        component: './DataCenter/riset',
+      },
+    ],
+  },
   {
     path: '/admin',
     name: 'user',
@@ -108,18 +135,18 @@ export default [
     ],
   },
 
-  {
-    path: '/three-js',
-    name: 'THREE JS',
-    icon: 'InboxOutlined',
-    component: './ThreeJS',
-  },
-  {
-    path: '/echarts',
-    name: 'eCharts',
-    icon: 'PieChartOutlined',
-    component: './ECharts',
-  },
+  // {
+  //   path: '/three-js',
+  //   name: 'THREE JS',
+  //   icon: 'InboxOutlined',
+  //   component: './ThreeJS',
+  // },
+  // {
+  //   path: '/echarts',
+  //   name: 'eCharts',
+  //   icon: 'PieChartOutlined',
+  //   component: './ECharts',
+  // },
 
   {
     path: '/',
