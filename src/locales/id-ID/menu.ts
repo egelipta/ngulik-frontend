@@ -103,4 +103,7 @@ export default {
   'menu.datacenter.datarack': 'Data Rak Server',
   'menu.datacenter.viewrack': 'Tampilan Rak Server',
   'menu.datacenter.riset': 'Riset',
+
+  //======================
+  'menu.workfloweditor': 'Editor Alur Kerja',
 };

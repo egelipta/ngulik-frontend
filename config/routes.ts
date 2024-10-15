@@ -102,6 +102,12 @@ export default [
     ],
   },
   {
+    path: '/workflow-editor',
+    name: 'workfloweditor',
+    icon: 'CreditCardOutlined',
+    component: './WorkFlowEditor',
+  },
+  {
     path: '/admin',
     name: 'user',
     icon: 'user',
