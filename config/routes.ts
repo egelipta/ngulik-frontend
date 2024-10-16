@@ -41,12 +41,12 @@ export default [
   //   component: './GanttTask',
   // },
 
-  {
-    path: '/heat-map',
-    name: 'heat-map',
-    icon: 'HeatMapOutlined',
-    component: './HeatMap',
-  },
+  // {
+  //   path: '/heat-map',
+  //   name: 'heat-map',
+  //   icon: 'HeatMapOutlined',
+  //   component: './HeatMap',
+  // },
 
   {
     path: '/gantt-task',
@@ -107,6 +107,7 @@ export default [
     icon: 'CreditCardOutlined',
     component: './WorkFlowEditor',
   },
+
   {
     path: '/admin',
     name: 'user',

@@ -164,7 +164,7 @@ export default () => {
         <Collapse
           size="small"
           items={items}
-          defaultActiveKey={['4']}
+          defaultActiveKey={[]}
           // onChange={onChange}
           expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
         />

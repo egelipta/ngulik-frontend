@@ -104,19 +104,60 @@ const ProFlowDemo = () => {
     );
 
     // MEnampilkan data node dan edge*****
-    useEffect(() => {
-        if (!editor) return;
-        const nodes = dataNodes;
-        const edges = dataEdges;
+    // useEffect(() => {
+    //     if (!editor) return;
+    //     const nodes = dataNodes;
+    //     const edges = dataEdges;
 
-        nodes.forEach(node => {
-            editor.addNode(node);
-        });
+    //     nodes.forEach(node => {
+    //         editor.addNode(node);
+    //     });
 
-        edges.forEach(edge => {
-            editor.addEdge(edge);
-        });
-    }, [editor]);
+    //     edges.forEach(edge => {
+    //         editor.addEdge(edge);
+    //     });
+    // }, [editor]);
+
+    // const logFlowData = useCallback(() => {
+    //     if (!editor) return;
+
+    //     // Retrieve nodes
+    //     const nodes = editor.reactflow?.getNodes().map((node) => ({
+    //         id: node.id,
+    //         type: node.type,
+    //         position: node.position,
+    //         data: node.data,
+    //     }));
+
+    //     // Retrieve edges
+    //     const edges = editor.reactflow?.getEdges().map((edge) => ({
+    //         id: edge.id,
+    //         type: edge.type,
+    //         animated: edge.animated,
+    //         style: edge.style,
+    //         source: edge.source,
+    //         target: edge.target,
+    //         sourceHandle: edge.sourceHandle,
+    //         targetHandle: edge.targetHandle,
+    //         selected: edge.selected,
+    //     }));
+
+    //     console.log('Nodes:', nodes);
+    //     console.log('Edges:', edges);
+    // }, [editor]);
+
+    const onNodeClick = useCallback(
+        (event: any, node: any) => {
+            if (!editor) return;
+
+            // Reset all nodes and edges style
+            editor.reactflow?.getNodes().forEach((n: any) => {
+                editor.selectElement(n.id)
+            });
+
+        },
+        [editor]
+    );
 
     return (
         <div className={styles.container}>
@@ -132,6 +173,7 @@ const ProFlowDemo = () => {
                 flowProps={{
                     onDrop,
                     onDragOver,
+                    onNodeClick,
                     defaultEdgeOptions: {
                         type: 'smoothstep',
                         animated: true,
