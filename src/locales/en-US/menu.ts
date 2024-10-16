@@ -69,4 +69,7 @@ export default {
   'menu.datacenter.datarack': 'Server Rack Data',
   'menu.datacenter.viewrack': 'Server Rack View',
   'menu.datacenter.riset': 'Research',
+
+  //======================
+  'menu.workfloweditor': 'WorkFlow Editor',
 };
