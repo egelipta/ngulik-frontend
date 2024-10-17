@@ -105,8 +105,30 @@ export default [
     path: '/workflow-editor',
     name: 'workfloweditor',
     icon: 'CreditCardOutlined',
-    component: './WorkFlowEditor',
+    // access: 'user_m',
+    routes: [
+      {
+        name: 'Table',
+        path: '/workflow-editor/table',
+        // access: 'user_m',
+        component: './WorkFlowEditor/index',
+      },
+      {
+        name: 'Editor',
+        path: '/workflow-editor/editor/:idParam',
+        // access: 'user_m',
+        component: './WorkFlowEditor/Editor/index',
+        hideInMenu: true,
+      },
+    ],
   },
+
+  // {
+  //   path: '/workflow-editor',
+  //   name: 'workfloweditor',
+  //   icon: 'CreditCardOutlined',
+  //   component: './WorkFlowEditor',
+  // },
 
   {
     path: '/admin',

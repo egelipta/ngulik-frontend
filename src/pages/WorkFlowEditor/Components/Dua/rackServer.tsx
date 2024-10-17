@@ -8,7 +8,7 @@ const RackServer = (node: any) => {
 
   return (
     <ProCard bordered className={cx(selected && styles.selectedNode)}>
-      <img src="./icons2/rack-server.png" alt="" height={100} />
+      <img src="/icons2/rack-server.png" alt="" height={100} />
       {/* <CopyOutlined style={{ fontSize: 100 }} /> */}
       <Handle type={'source'} position={Position.Right} />
       <Handle type={'target'} position={Position.Left} />

@@ -8,7 +8,7 @@ const Building = (node: any) => {
 
   return (
     <ProCard bordered className={cx(selected && styles.selectedNode)}>
-      <img src="./icons3/building.png" alt="" height={100} />
+      <img src="/icons3/building.png" alt="" height={100} />
       <Handle type={'source'} position={Position.Right} />
       <Handle type={'target'} position={Position.Left} />
     </ProCard>
