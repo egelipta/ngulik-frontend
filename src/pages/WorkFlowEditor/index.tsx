@@ -68,7 +68,7 @@ const WorkflowEditor = () => {
                         key="add_data"
                         type="primary"
                         onClick={() => {
-                            // Aksi untuk tombol Tambah
+                            navigate('/workflow-editor/add-data'); // Ganti '/target-page' dengan rute tujuan Anda
                         }}
                     >
                         <PlusOutlined />
