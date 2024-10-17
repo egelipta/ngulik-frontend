@@ -3,25 +3,25 @@ import { Background, BackgroundVariant, FlowEditor, FlowEditorProvider, FlowPane
 
 import { PageContainer } from '@ant-design/pro-components';
 import { DeleteOutlined } from '@ant-design/icons';
-import useStyles from './css/styles';
+import useStyles from '../css/styles';
 import { useCallback } from 'react';
 import { Button, Space } from 'antd';
 import Sidebar from './sidebar';
 
-import IkonSatu from './Components/Satu/ikonSatu';
-import IkonDua from './Components/Satu/ikonDua';
-import Server from './Components/Dua/server';
-import RackServer from './Components/Dua/rackServer';
-import Cloud from './Components/Dua/cloud';
-import Pc from './Components/Dua/pc';
-import Tree from './Components/Tiga/tree';
-import Car from './Components/Tiga/car';
-import Electricity from './Components/Tiga/electricity';
-import Generator from './Components/Tiga/generator';
-import Building from './Components/Tiga/building';
-import Circle1 from './Components/Empat/circle1';
-import Circle2 from './Components/Empat/circle2';
-import Circle3 from './Components/Empat/circle3';
+import IkonSatu from '../Components/Satu/ikonSatu';
+import IkonDua from '../Components/Satu/ikonDua';
+import Server from '../Components/Dua/server';
+import RackServer from '../Components/Dua/rackServer';
+import Cloud from '../Components/Dua/cloud';
+import Pc from '../Components/Dua/pc';
+import Tree from '../Components/Tiga/tree';
+import Car from '../Components/Tiga/car';
+import Electricity from '../Components/Tiga/electricity';
+import Generator from '../Components/Tiga/generator';
+import Building from '../Components/Tiga/building';
+import Circle1 from '../Components/Empat/circle1';
+import Circle2 from '../Components/Empat/circle2';
+import Circle3 from '../Components/Empat/circle3';
 import { workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet } from '@/services/pjvms/workflowEditor';
 
 // let id = 0;

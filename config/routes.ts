@@ -101,11 +101,53 @@ export default [
       },
     ],
   },
+  // {
+  //   path: '/workflow-editor',
+  //   name: 'workfloweditor',
+  //   icon: 'CreditCardOutlined',
+  //   // access: 'user_m',
+  //   routes: [
+  //     {
+  //       name: 'Table',
+  //       path: '/workflow-editor/table',
+  //       // access: 'user_m',
+  //       component: './WorkFlowEditor/index',
+  //     },
+  //     {
+  //       name: 'Add Data',
+  //       path: '/workflow-editor/add-data',
+  //       // access: 'user_m',
+  //       component: './WorkFlowEditor/Editor/add',
+  //     },
+  //     {
+  //       name: 'Editor',
+  //       path: '/workflow-editor/editor/:idParam',
+  //       // access: 'user_m',
+  //       component: './WorkFlowEditor/Editor/index',
+  //       hideInMenu: true,
+  //     },
+  //   ],
+  // },
+
   {
     path: '/workflow-editor',
     name: 'workfloweditor',
     icon: 'CreditCardOutlined',
     component: './WorkFlowEditor',
+  },
+  {
+    path: '/workflow-editor/add-data',
+    name: 'workfloweditor',
+    icon: 'CreditCardOutlined',
+    component: './WorkFlowEditor/Editor/add',
+    hideInMenu: true
+  },
+  {
+    path: '/workflow-editor/editor/:idParam',
+    name: 'workfloweditor',
+    icon: 'CreditCardOutlined',
+    component: './WorkFlowEditor/Editor',
+    hideInMenu: true
   },
 
   {
