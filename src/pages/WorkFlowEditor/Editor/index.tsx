@@ -4,9 +4,7 @@ import { PageContainer, ProCard } from '@ant-design/pro-components';
 import { DeleteOutlined } from '@ant-design/icons';
 import useStyles from '../css/styles';
 import { useCallback } from 'react';
-import { Button, Input, Space } from 'antd';
-import { useParams } from 'react-router-dom';
-
+import { Button, Input, message, Space } from 'antd';
 import Sidebar from './sidebar';
 
 import IkonSatu from '../Components/Satu/ikonSatu';
@@ -23,7 +21,11 @@ import Building from '../Components/Tiga/building';
 import Circle1 from '../Components/Empat/circle1';
 import Circle2 from '../Components/Empat/circle2';
 import Circle3 from '../Components/Empat/circle3';
-import { workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet } from '@/services/pjvms/workflowEditor';
+
+import { workfloweditorUpdateApiV1WorkfloweditorWorkfloweditorUpdateDataPut, workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet } from '@/services/pjvms/workflowEditor';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 
 // let id = 0;
 const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
@@ -48,15 +50,20 @@ const nodeTypes = {
 const ProFlowDemo = () => {
     const editor = useFlowEditor();
     const { styles } = useStyles();
+    const navigate = useNavigate();
     const { idParam } = useParams();
 
     const [dataNodes, setDataNodes] = useState<any[]>([]);
     const [dataEdges, setDataEdges] = useState<any[]>([]);
     const [name, setName] = useState('');
+    const [allData, setAllData] = useState();
+
 
     const getDataWorkflow = async () => {
         try {
             const result = await workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet({ id: idParam });
+            setAllData(result)
+
             const fetchName = result[0]?.name;
             setName(fetchName);
 
@@ -74,12 +81,13 @@ const ProFlowDemo = () => {
         getDataWorkflow();
     }, []);
 
+
     const onDragOver = useCallback((event: any) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, []);
 
-    //fungsi drop node ke drop zone
+    // Function to drop node to the drop zone
     const onDrop = useCallback(
         (event: any) => {
             event.preventDefault();
@@ -93,7 +101,7 @@ const ProFlowDemo = () => {
             const position = editor.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
-            });
+            });// Menggunakan useNavigate untuk navigasi
             const newNode = {
                 id: getId(),
                 type,
@@ -123,44 +131,77 @@ const ProFlowDemo = () => {
         });
     }, [editor]);
 
-    const logFlowData = useCallback(() => {
+    const updateData = async (value: API.UpdateWorkflowEditor) => {
+        try {
+            const result = await workfloweditorUpdateApiV1WorkfloweditorWorkfloweditorUpdateDataPut(value);
+            if (result.code === 200) {
+                message.success(result.message);
+                return result; // Return the result to the caller
+            } else {
+                message.error(result.message || 'Update failed.');
+                return null; // Return null if the update failed
+            }
+        } catch (error) {
+            console.error('Error updating data:', error);
+            message.error('An error occurred during the update. Please try again.');
+            return null; // Return null if an exception occurred
+        }
+    };
+
+    const saveData = useCallback(async () => {
         if (!editor) return;
 
-        // Retrieve nodes
-        const nodes = editor.reactflow?.getNodes().map((node) => ({
-            id: node.id,
-            type: node.type,
-            position: node.position,
-            data: node.data,
-        }));
+        const workflowName = name.trim() === '' ? `Untitled${Math.floor(new Date().getTime() / 1000)}` : name;
 
-        // Retrieve edges
-        const edges = editor.reactflow?.getEdges().map((edge) => ({
-            id: edge.id,
-            type: edge.type,
-            animated: edge.animated,
-            style: edge.style,
-            source: edge.source,
-            target: edge.target,
-            sourceHandle: edge.sourceHandle,
-            targetHandle: edge.targetHandle,
-            selected: edge.selected,
-        }));
+        const nodes = editor.reactflow?.getNodes() || [];
+        const edges = editor.reactflow?.getEdges() || [];
 
-        console.log('Nodes:', nodes);
-        console.log('Edges:', edges);
-    }, [editor]);
+        const strukturData = {
+            id: Number(idParam),
+            name: workflowName,
+            nodesjson: nodes.map((node) => ({
+                id: node.id,
+                type: node.type,
+                position: node.position,
+                data: node.data,
+            })),
+            edgesjson: edges.map((edge) => ({
+                id: edge.id,
+                type: edge.type,
+                animated: edge.animated,
+                style: edge.style,
+                source: edge.source,
+                target: edge.target,
+                sourceHandle: edge.sourceHandle,
+                targetHandle: edge.targetHandle,
+                selected: edge.selected,
+            })),
+        };
+
+        try {
+            const result = await updateData(strukturData);
+            if (result && result.code === 200) {
+                // message.success('Saved successfully');
+                navigate('/workflow-editor');
+            } else {
+                message.error(result?.message || 'Failed to save');
+            }
+        } catch (error) {
+            message.error('Error, try again later!');
+        }
+    }, [editor, name, idParam, updateData]);
+
+
+
 
     return (
         <div className={styles.container}>
             <FlowEditor
-                defaultViewport={
-                    {
-                        x: 0,
-                        y: 0,
-                        zoom: 0.7
-                    }
-                }
+                defaultViewport={{
+                    x: 0,
+                    y: 0,
+                    zoom: 0.7,
+                }}
                 nodeTypes={nodeTypes}
                 flowProps={{
                     onDrop,
@@ -168,8 +209,7 @@ const ProFlowDemo = () => {
                     defaultEdgeOptions: {
                         type: 'smoothstep',
                         animated: true,
-                        style: { strokeWidth: 6 },
-                        // type: 'custom',
+                        style: { strokeWidth: 3 },
                     },
                 }}
                 miniMap={false}
@@ -179,8 +219,13 @@ const ProFlowDemo = () => {
                 <Sidebar />
                 <FlowPanel position="top-left">
                     <ProCard size='small'>
-                        <Space direction='vertical'>
-                            <Input value={name} placeholder='Name...' />
+                        <Space direction="vertical">
+                            <Input
+                                name="name"
+                                placeholder="Name..."
+                                value={name}
+                                onChange={(e) => setName(e.target.value || '')}
+                            />
                             <Space>
                                 <Button
                                     danger
@@ -209,7 +254,7 @@ const ProFlowDemo = () => {
                                 <Button
                                     type="primary"
                                     size="small"
-                                    onClick={logFlowData}
+                                    onClick={saveData}
                                 >
                                     Simpan
                                 </Button>
@@ -217,13 +262,12 @@ const ProFlowDemo = () => {
                         </Space>
                     </ProCard>
                 </FlowPanel>
-                {/* <Background gap={30} offset={2} color='grey' variant={BackgroundVariant.Cross} /> */}
             </FlowEditor>
         </div>
     );
 };
 
-const WorkflowEditor = () => {
+const AddData = () => {
     return (
         <PageContainer>
             <FlowEditorProvider>
@@ -233,4 +277,4 @@ const WorkflowEditor = () => {
     );
 };
 
-export default WorkflowEditor;
+export default AddData;

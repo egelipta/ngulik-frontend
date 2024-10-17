@@ -103,19 +103,19 @@ const ProFlowDemo = () => {
 
         const workflowName = name.trim() === '' ? `Untitled${Math.floor(new Date().getTime() / 1000)}` : name;
 
-        const nodes = editor.reactflow?.getNodes();
-        if (!nodes || nodes.length === 0) {
-            message.warning('Tidak ada node yang ditemukan untuk disimpan.');
-            return;
-        }
+        const nodes = editor.reactflow?.getNodes() || [];
+        // if (!nodes || nodes.length === 0) {
+        //     message.warning('Tidak ada node yang ditemukan untuk disimpan.');
+        //     return;
+        // }
 
-        const edges = editor.reactflow?.getEdges();
-        if (!edges || edges.length === 0) {
-            message.warning('Tidak ada edge yang ditemukan untuk disimpan.');
-            return;
-        }
+        const edges = editor.reactflow?.getEdges() || [];
+        // if (!edges || edges.length === 0) {
+        //     message.warning('Tidak ada edge yang ditemukan untuk disimpan.');
+        //     return;
+        // }
 
-        // Persiapkan data yang akan dikirim sesuai format yang diharapkan oleh backend
+        //format backend
         const strukturData = {
             name: workflowName,
             nodesjson: nodes.map((node) => ({
@@ -142,14 +142,13 @@ const ProFlowDemo = () => {
         try {
             const result = await createData(strukturData);
             if (result && result.code === 200) {
-                message.success('Data berhasil disimpan.');
+                message.success('Saved');
                 navigate('/workflow-editor')
             } else {
-                message.error(result?.message || 'Gagal menyimpan data.');
+                message.error(result?.message || 'Failed');
             }
         } catch (error) {
-            console.error('Kesalahan saat menyimpan data:', error);
-            message.error('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
+            message.error('Error, try again later!');
         }
     }, [editor, name, createData]);
 
