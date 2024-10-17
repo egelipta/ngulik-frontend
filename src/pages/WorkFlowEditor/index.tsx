@@ -1,13 +1,24 @@
-import { workfloweditorListApiV1WorkfloweditorWorkfloweditorGet } from '@/services/pjvms/workflowEditor';
+import { workfloweditorListApiV1WorkfloweditorWorkfloweditorGet, workfolweditorDelApiV1WorkfloweditorWorkfloweditorDelDataDelete } from '@/services/pjvms/workflowEditor';
 import { DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumnType, ProTable } from '@ant-design/pro-components';
-import { Empty, Button, Popconfirm } from 'antd';
+import { Empty, Button, Popconfirm, message } from 'antd';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const WorkflowEditor = () => {
     const actionRef = useRef<ActionType>();
-    const navigate = useNavigate(); // Menggunakan useNavigate untuk navigasi
+    const navigate = useNavigate();
+
+    const deleteData = async (value: API.workfolweditorDelApiV1WorkfloweditorWorkfloweditorDelDataDeleteParams) => {
+        const result = await workfolweditorDelApiV1WorkfloweditorWorkfloweditorDelDataDelete({ id: value.id });
+        if (result.code === 200) {
+            // refresh the list
+            actionRef.current?.reload();
+            message.success(result.message);
+        } else {
+            message.error(result.message);
+        }
+    };
 
     const columns: ProColumnType<API.WorkflowEditorItem>[] = [
         {
@@ -39,7 +50,7 @@ const WorkflowEditor = () => {
                     <Popconfirm
                         key={'delete'}
                         title="Anda yakin?"
-                        onConfirm={() => console.log(d)}
+                        onConfirm={() => deleteData(d)}
                         placement="leftTop"
                     >
                         <Button danger type="primary" shape="default">

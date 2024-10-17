@@ -24,6 +24,7 @@ import Circle3 from '../Components/Empat/circle3';
 
 import { workfloweditorAddApiV1WorkfloweditorWorkfloweditorAddDataPost } from '@/services/pjvms/workflowEditor';
 import { useNavigate } from 'react-router-dom';
+import idID from '@/locales/id-ID';
 
 // let id = 0;
 const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
@@ -49,7 +50,7 @@ const ProFlowDemo = () => {
     const editor = useFlowEditor();
     const { styles } = useStyles();
     const [name, setName] = useState('');
-    const navigate = useNavigate(); // Menggunakan useNavigate untuk navigasi
+    const navigate = useNavigate();
 
 
     const onDragOver = useCallback((event: any) => {
@@ -71,7 +72,7 @@ const ProFlowDemo = () => {
             const position = editor.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
-            });
+            });// Menggunakan useNavigate untuk navigasi
             const newNode = {
                 id: getId(),
                 type,
@@ -89,7 +90,7 @@ const ProFlowDemo = () => {
     const createData = async (values: API.CreateWorkflowEditor) => {
         try {
             const result = await workfloweditorAddApiV1WorkfloweditorWorkfloweditorAddDataPost(values);
-            return result; // Pastikan mengembalikan hasil respons API
+            return result;
         } catch (error) {
             console.error('Error during API call:', error);
             throw error;
@@ -100,7 +101,7 @@ const ProFlowDemo = () => {
     const saveData = useCallback(async () => {
         if (!editor) return;
 
-        const workflowName = name.trim() === '' ? 'Untitled' : name;
+        const workflowName = name.trim() === '' ? `Untitled${Math.floor(new Date().getTime() / 1000)}` : name;
 
         const nodes = editor.reactflow?.getNodes();
         if (!nodes || nodes.length === 0) {
