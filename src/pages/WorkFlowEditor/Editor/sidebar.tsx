@@ -164,7 +164,14 @@ export default () => {
           <Col xxl={6} md={6}>
             <ProCard style={cardStyle}>
               <div onDragStart={(event) => onDragStart(event, 'ChartGauge')} draggable>
-                <img src="/gauge.png" alt="Gauge" height={50} />
+                <img src="/charts/gauge.png" alt="Gauge" height={50} />
+              </div>
+            </ProCard>
+          </Col>
+          <Col xxl={6} md={6}>
+            <ProCard style={cardStyle}>
+              <div onDragStart={(event) => onDragStart(event, 'ProgressCircle')} draggable>
+                <img src="/charts/progress-circle.png" alt="Gauge" height={50} />
               </div>
             </ProCard>
           </Col>
