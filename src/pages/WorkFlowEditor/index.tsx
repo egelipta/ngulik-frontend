@@ -28,7 +28,8 @@ const WorkflowEditor = () => {
         {
             title: 'Tanggal',
             dataIndex: 'create_time',
-            valueType: 'date'
+            valueType: 'date',
+            hideInSearch: true
         },
         {
             title: 'Actionable',

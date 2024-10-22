@@ -2,6 +2,7 @@ import { Col, Collapse, CollapseProps, Row } from 'antd';
 import useStyles from '../css/styles';
 import { ProCard } from '@ant-design/pro-components';
 import { HighlightOutlined, CopyOutlined, CaretRightOutlined } from '@ant-design/icons';
+import ChartGauge from '../Components/Charts/gauge';
 
 export default () => {
   const { styles } = useStyles();
@@ -155,6 +156,21 @@ export default () => {
         </Row>
       ),
     },
+    {
+      key: '5',
+      label: 'Charts',
+      children: (
+        <Row gutter={[5, 5]}>
+          <Col xxl={6} md={6}>
+            <ProCard style={cardStyle}>
+              <div onDragStart={(event) => onDragStart(event, 'ChartGauge')} draggable>
+                <img src="/gauge.png" alt="Gauge" height={50} />
+              </div>
+            </ProCard>
+          </Col>
+        </Row >
+      ),
+    },
   ];
 
   return (
@@ -164,7 +180,7 @@ export default () => {
         <Collapse
           size="small"
           items={items}
-          defaultActiveKey={[]}
+          defaultActiveKey={['5']}
           // onChange={onChange}
           expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
         />

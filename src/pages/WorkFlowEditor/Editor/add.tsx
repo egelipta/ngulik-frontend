@@ -5,6 +5,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 import useStyles from '../css/styles';
 import { useCallback } from 'react';
 import { Button, Input, message, Space } from 'antd';
+import { workfloweditorAddApiV1WorkfloweditorWorkfloweditorAddDataPost } from '@/services/pjvms/workflowEditor';
+
 import Sidebar from './sidebar';
 
 import IkonSatu from '../Components/Satu/ikonSatu';
@@ -21,10 +23,9 @@ import Building from '../Components/Tiga/building';
 import Circle1 from '../Components/Empat/circle1';
 import Circle2 from '../Components/Empat/circle2';
 import Circle3 from '../Components/Empat/circle3';
+import ChartGauge from '../Components/Charts/gauge';
 
-import { workfloweditorAddApiV1WorkfloweditorWorkfloweditorAddDataPost } from '@/services/pjvms/workflowEditor';
 import { useNavigate } from 'react-router-dom';
-import idID from '@/locales/id-ID';
 
 // let id = 0;
 const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
@@ -44,6 +45,7 @@ const nodeTypes = {
     Circle1: Circle1,
     Circle2: Circle2,
     Circle3: Circle3,
+    ChartGauge: ChartGauge,
 };
 
 const ProFlowDemo = () => {
@@ -142,7 +144,7 @@ const ProFlowDemo = () => {
         try {
             const result = await createData(strukturData);
             if (result && result.code === 200) {
-                message.success('Saved');
+                message.success(result.message);
                 navigate('/workflow-editor')
             } else {
                 message.error(result?.message || 'Failed');
@@ -152,6 +154,21 @@ const ProFlowDemo = () => {
         }
     }, [editor, name, createData]);
 
+    //fungsi hapus Node dan Edge
+    const hapusNodeEdge = () => {
+        if (!editor || !editor.reactflow) return;
+
+        editor.getSelectedKeys().forEach((id) => {
+            //ketika hapus node, edge yang terkoneksi ikut terhapus
+            const connectedEdges = editor.reactflow?.getEdges().filter(edge => edge.source === id || edge.target === id) || [];
+            connectedEdges.forEach((edge) => {
+                editor.deleteEdge(edge.id);
+            });
+            // hapus node dan edge satu persatu
+            editor.deleteNode(id);
+            editor.deleteEdge(id);
+        });
+    }
 
     return (
         <div className={styles.container}>
@@ -168,7 +185,7 @@ const ProFlowDemo = () => {
                     defaultEdgeOptions: {
                         type: 'smoothstep',
                         animated: true,
-                        style: { strokeWidth: 3 },
+                        style: { strokeWidth: 8 },
                     },
                 }}
                 miniMap={false}
@@ -184,31 +201,16 @@ const ProFlowDemo = () => {
                                 placeholder="Name..."
                                 value={name}
                                 onChange={(e) => setName(e.target.value || '')}
+                                autoComplete='off'
                             />
                             <Space>
                                 <Button
                                     danger
                                     type="primary"
                                     size="small"
-                                    onClick={() => {
-                                        editor.getSelectedKeys().forEach((id) => {
-                                            editor.deleteNode(id);
-                                        });
-                                    }}
+                                    onClick={hapusNodeEdge}
                                 >
-                                    Node <DeleteOutlined />
-                                </Button>
-                                <Button
-                                    danger
-                                    type="primary"
-                                    size="small"
-                                    onClick={() => {
-                                        editor.getSelectedKeys().forEach((id) => {
-                                            editor.deleteEdge(id);
-                                        });
-                                    }}
-                                >
-                                    Edge <DeleteOutlined />
+                                    Hapus <DeleteOutlined />
                                 </Button>
                                 <Button
                                     type="primary"
