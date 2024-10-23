@@ -26,6 +26,7 @@ import Circle3 from '../Components/Empat/circle3';
 
 import ChartGauge from '../Components/Charts/gauge';
 import ProgressCircle from '../Components/Charts/progress-circle';
+import ChartLiquid from '../Components/Charts/liquid';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -49,6 +50,7 @@ const nodeTypes = {
     Circle3: Circle3,
     ChartGauge: ChartGauge,
     ProgressCircle: ProgressCircle,
+    ChartLiquid: ChartLiquid,
 };
 
 const ProFlowDemo = () => {
