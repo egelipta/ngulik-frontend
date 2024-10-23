@@ -137,14 +137,14 @@ export default [
   },
   {
     path: '/workflow-editor/add-data',
-    name: 'workfloweditor',
+    name: 'Add Data',
     icon: 'CreditCardOutlined',
     component: './WorkFlowEditor/Editor/add',
     hideInMenu: true
   },
   {
     path: '/workflow-editor/editor/:idParam',
-    name: 'workfloweditor',
+    name: 'Review',
     icon: 'CreditCardOutlined',
     component: './WorkFlowEditor/Editor',
     hideInMenu: true

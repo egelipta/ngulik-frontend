@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Background, BackgroundVariant, FlowEditor, FlowEditorProvider, FlowPanel, useFlowEditor } from '@ant-design/pro-flow';
-import { PageContainer, ProCard } from '@ant-design/pro-components';
+import { FlowEditor, FlowEditorProvider, FlowPanel, useFlowEditor } from '@ant-design/pro-flow';
+import { DrawerForm, PageContainer, ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
 import { DeleteOutlined } from '@ant-design/icons';
 import useStyles from '../css/styles';
 import { useCallback } from 'react';
 import { Button, Input, message, Space } from 'antd';
+import {
+    workfloweditorUpdateApiV1WorkfloweditorWorkfloweditorUpdateDataPut,
+    workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet
+}
+    from '@/services/pjvms/workflowEditor';
+
 import Sidebar from './sidebar';
 
 import IkonSatu from '../Components/Satu/ikonSatu';
@@ -21,14 +27,17 @@ import Building from '../Components/Tiga/building';
 import Circle1 from '../Components/Empat/circle1';
 import Circle2 from '../Components/Empat/circle2';
 import Circle3 from '../Components/Empat/circle3';
+import ChartGauge from '../Components/Charts/gauge';
+import ProgressCircle from '../Components/Charts/progress-circle';
+import ChartLiquid from '../Components/Charts/liquid';
 
-import { workfloweditorUpdateApiV1WorkfloweditorWorkfloweditorUpdateDataPut, workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet } from '@/services/pjvms/workflowEditor';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 
-// let id = 0;
-const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
+let id = 1;
+const getId = () => `${id++}`;
+// const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
 
 const nodeTypes = {
     IkonSatu: IkonSatu,
@@ -45,6 +54,9 @@ const nodeTypes = {
     Circle1: Circle1,
     Circle2: Circle2,
     Circle3: Circle3,
+    ChartGauge: ChartGauge,
+    ProgressCircle: ProgressCircle,
+    ChartLiquid: ChartLiquid,
 };
 
 const ProFlowDemo = () => {
@@ -56,13 +68,13 @@ const ProFlowDemo = () => {
     const [dataNodes, setDataNodes] = useState<any[]>([]);
     const [dataEdges, setDataEdges] = useState<any[]>([]);
     const [name, setName] = useState('');
-    const [allData, setAllData] = useState();
 
+    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [selectedNode, setSelectedNode] = useState<any>(null);
 
     const getDataWorkflow = async () => {
         try {
             const result = await workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet({ id: idParam });
-            setAllData(result)
 
             const fetchName = result[0]?.name;
             setName(fetchName);
@@ -101,7 +113,7 @@ const ProFlowDemo = () => {
             const position = editor.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
-            });// Menggunakan useNavigate untuk navigasi
+            });
             const newNode = {
                 id: getId(),
                 type,
@@ -191,8 +203,26 @@ const ProFlowDemo = () => {
         }
     }, [editor, name, idParam, updateData]);
 
+    //fungsi hapus Node dan Edge
+    const hapusNodeEdge = () => {
+        if (!editor || !editor.reactflow) return;
 
+        editor.getSelectedKeys().forEach((id) => {
+            //ketika hapus node, edge yang terkoneksi ikut terhapus
+            const connectedEdges = editor.reactflow?.getEdges().filter(edge => edge.source === id || edge.target === id) || [];
+            connectedEdges.forEach((edge) => {
+                editor.deleteEdge(edge.id);
+            });
+            // hapus node dan edge satu persatu
+            editor.deleteNode(id);
+            editor.deleteEdge(id);
+        });
+    }
 
+    const handleNodeClick = useCallback((_event: React.MouseEvent, node: any) => {
+        setSelectedNode(node); // Store the clicked node
+        setDrawerVisible(true); // Show the drawer
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -206,10 +236,11 @@ const ProFlowDemo = () => {
                 flowProps={{
                     onDrop,
                     onDragOver,
+                    onNodeClick: handleNodeClick, // Attach the node click handler
                     defaultEdgeOptions: {
                         type: 'smoothstep',
                         animated: true,
-                        style: { strokeWidth: 3 },
+                        style: { strokeWidth: 8 },
                     },
                 }}
                 miniMap={false}
@@ -225,31 +256,17 @@ const ProFlowDemo = () => {
                                 placeholder="Name..."
                                 value={name}
                                 onChange={(e) => setName(e.target.value || '')}
+                                autoComplete='off'
                             />
                             <Space>
                                 <Button
+                                    // disabled
                                     danger
                                     type="primary"
                                     size="small"
-                                    onClick={() => {
-                                        editor.getSelectedKeys().forEach((id) => {
-                                            editor.deleteNode(id);
-                                        });
-                                    }}
+                                    onClick={hapusNodeEdge}
                                 >
-                                    Node <DeleteOutlined />
-                                </Button>
-                                <Button
-                                    danger
-                                    type="primary"
-                                    size="small"
-                                    onClick={() => {
-                                        editor.getSelectedKeys().forEach((id) => {
-                                            editor.deleteEdge(id);
-                                        });
-                                    }}
-                                >
-                                    Edge <DeleteOutlined />
+                                    Hapus <DeleteOutlined />
                                 </Button>
                                 <Button
                                     type="primary"
@@ -263,11 +280,70 @@ const ProFlowDemo = () => {
                     </ProCard>
                 </FlowPanel>
             </FlowEditor>
+
+            {/* <Drawer
+                title="Basic Setup"
+                placement="right"
+                onClose={() => setDrawerVisible(false)}
+                open={drawerVisible}
+                width={400}
+            >
+                {selectedNode && (
+                    <div>
+                        <h4>{selectedNode.data?.title}</h4>
+                        <p>{selectedNode.id}</p>
+                    </div>
+                )}
+            </Drawer> */}
+
+            <DrawerForm
+                onOpenChange={setDrawerVisible}
+                open={drawerVisible}
+                title="Basic Setup"
+                resize={{
+                    maxWidth: window.innerWidth * 0.8,
+                    minWidth: 400,
+                }}
+                autoFocusFirstInput
+                drawerProps={{
+                    destroyOnClose: true,
+                }}
+                submitTimeout={2000}
+                onFinish={async (values) => {
+                    console.log(values.name);
+                    message.success('Berhasil disimpan');
+                    return true;
+                }}
+            >
+                {selectedNode && (
+                    <ProForm.Group>
+                        <ProFormText
+                            name="field1"
+                            width="md"
+                            label="Field 1"
+                            placeholder="Field 1"
+                            initialValue={selectedNode.id}
+                        />
+                        <ProFormText
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                            width="md"
+                            name="field2"
+                            label="Field 2"
+                            placeholder="Field 2"
+                            initialValue={selectedNode.data.title}
+                        />
+                    </ProForm.Group>
+                )}
+            </DrawerForm>
         </div>
     );
 };
 
-const AddData = () => {
+const Editor = () => {
     return (
         <PageContainer>
             <FlowEditorProvider>
@@ -277,4 +353,4 @@ const AddData = () => {
     );
 };
 
-export default AddData;
+export default Editor;
