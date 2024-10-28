@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { FlowEditor, FlowEditorProvider, FlowPanel, useFlowEditor } from '@ant-design/pro-flow';
-import { DrawerForm, PageContainer, ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
+import { DrawerForm, PageContainer, ProCard, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { DeleteOutlined } from '@ant-design/icons';
 import useStyles from '../css/styles';
 import { useCallback } from 'react';
-import { Button, Input, message, Space } from 'antd';
+import { Button, Input, message, Select, Space } from 'antd';
 import {
     workfloweditorUpdateApiV1WorkfloweditorWorkfloweditorUpdateDataPut,
     workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet
@@ -224,6 +224,10 @@ const ProFlowDemo = () => {
         setDrawerVisible(true); // Show the drawer
     }, []);
 
+    const handleChange = (value: string) => {
+        console.log(`selected ${value}`);
+    };
+
     return (
         <div className={styles.container}>
             <FlowEditor
@@ -281,21 +285,6 @@ const ProFlowDemo = () => {
                 </FlowPanel>
             </FlowEditor>
 
-            {/* <Drawer
-                title="Basic Setup"
-                placement="right"
-                onClose={() => setDrawerVisible(false)}
-                open={drawerVisible}
-                width={400}
-            >
-                {selectedNode && (
-                    <div>
-                        <h4>{selectedNode.data?.title}</h4>
-                        <p>{selectedNode.id}</p>
-                    </div>
-                )}
-            </Drawer> */}
-
             <DrawerForm
                 onOpenChange={setDrawerVisible}
                 open={drawerVisible}
@@ -318,24 +307,57 @@ const ProFlowDemo = () => {
                 {selectedNode && (
                     <ProForm.Group>
                         <ProFormText
-                            name="field1"
-                            width="md"
-                            label="Field 1"
-                            placeholder="Field 1"
-                            initialValue={selectedNode.id}
-                        />
-                        <ProFormText
                             rules={[
                                 {
                                     required: true,
                                 },
                             ]}
                             width="md"
-                            name="field2"
-                            label="Field 2"
-                            placeholder="Field 2"
+                            name="title"
+                            label="Title"
+                            placeholder="Title..."
                             initialValue={selectedNode.data.title}
                         />
+                        <ProFormSelect
+                            width={"md"}
+                            showSearch
+                            name={'perangkat'}
+                            label={'Perangkat'}
+                            placeholder={'Pilih yang terbaik!'}
+                            initialValue={selectedNode.data.perangkat}
+                            // rules={[
+                            //     {
+                            //         required: true,
+                            //         message: 'Status harus diisi!',
+                            //     },
+                            // ]}
+                            options={[
+                                { label: 'Device 1', value: 1 },
+                                { label: 'Device Dua', value: 2 },
+                                { label: 'Device 3', value: 3 },
+                                { label: 'Device Empat', value: 4 },
+                                { label: 'Device Full', value: 5 },
+                            ]}
+                        />
+                        {/* <ProFormSelect
+                            width={"md"}
+                            showSearch
+                            name={'idperangkat'}
+                            label={'Label'}
+                            placeholder={'Pipih yang terbaik!'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Status harus diisi!',
+                                },
+                            ]}
+                            options={[
+                                { label: 'All', value: 0 },
+                                { label: 'Open', value: 1 },
+                                { label: 'Closed', value: 2 },
+                                { label: 'Processing', value: 3 },
+                            ]}
+                        /> */}
                     </ProForm.Group>
                 )}
             </DrawerForm>
