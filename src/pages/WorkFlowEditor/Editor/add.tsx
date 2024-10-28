@@ -1,28 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Background, BackgroundVariant, FlowEditor, FlowEditorProvider, FlowPanel, useFlowEditor } from '@ant-design/pro-flow';
-import { PageContainer, ProCard } from '@ant-design/pro-components';
+import { DrawerForm, PageContainer, ProCard, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { DeleteOutlined } from '@ant-design/icons';
 import useStyles from '../css/styles';
 import { useCallback } from 'react';
-import { Button, Input, message, Space } from 'antd';
+import { Button, Drawer, Input, message, Slider, Space } from 'antd';
 import { workfloweditorAddApiV1WorkfloweditorWorkfloweditorAddDataPost } from '@/services/pjvms/workflowEditor';
 
 import Sidebar from './sidebar';
-
-import IkonSatu from '../Components/Satu/ikonSatu';
-import IkonDua from '../Components/Satu/ikonDua';
-import Server from '../Components/Dua/server';
-import RackServer from '../Components/Dua/rackServer';
-import Cloud from '../Components/Dua/cloud';
-import Pc from '../Components/Dua/pc';
-import Tree from '../Components/Tiga/tree';
-import Car from '../Components/Tiga/car';
-import Electricity from '../Components/Tiga/electricity';
-import Generator from '../Components/Tiga/generator';
-import Building from '../Components/Tiga/building';
-import Circle1 from '../Components/Empat/circle1';
-import Circle2 from '../Components/Empat/circle2';
-import Circle3 from '../Components/Empat/circle3';
 
 import ChartGauge from '../Components/Charts/gauge';
 import ProgressCircle from '../Components/Charts/progress-circle';
@@ -30,24 +15,11 @@ import ChartLiquid from '../Components/Charts/liquid';
 
 import { useNavigate } from 'react-router-dom';
 
-// let id = 0;
-const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
+let id = 0;
+const getId = () => `${id++}`;
+// const getId = () => `${Math.floor(new Date().getTime() / 1000)}`;
 
 const nodeTypes = {
-    IkonSatu: IkonSatu,
-    IkonDua: IkonDua,
-    Server: Server,
-    RackServer: RackServer,
-    Cloud: Cloud,
-    Pc: Pc,
-    Tree: Tree,
-    Car: Car,
-    Electricity: Electricity,
-    Generator: Generator,
-    Building: Building,
-    Circle1: Circle1,
-    Circle2: Circle2,
-    Circle3: Circle3,
     ChartGauge: ChartGauge,
     ProgressCircle: ProgressCircle,
     ChartLiquid: ChartLiquid,
@@ -59,13 +31,20 @@ const ProFlowDemo = () => {
     const [name, setName] = useState('');
     const navigate = useNavigate();
 
+    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [selectedNode, setSelectedNode] = useState<any>(null);
+    const [idPerangkat, setIdPerangkat] = useState<number | null>(null);
+    const [title, setTitle] = useState<string>('');
+    const [size, setSize] = useState(150);
 
+    // fungsi drag/ambil component di sidebar
     const onDragOver = useCallback((event: any) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, []);
 
-    // Function to drop node to the drop zone
+    // fungsi untuk drop component dari sidebar ke drop zone
+    // component di sidebar didrag dan drop ke dropzone
     const onDrop = useCallback(
         (event: any) => {
             event.preventDefault();
@@ -79,19 +58,21 @@ const ProFlowDemo = () => {
             const position = editor.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
-            });// Menggunakan useNavigate untuk navigasi
+            });
             const newNode = {
                 id: getId(),
                 type,
                 position,
                 data: {
-                    title: `${type} node`,
+                    title: `${type}`,
+                    idPerangkat: null,
+                    size: 150,
                 },
             };
 
             editor.addNode(newNode);
         },
-        [editor],
+        [editor, idPerangkat, size],
     );
 
     const createData = async (values: API.CreateWorkflowEditor) => {
@@ -104,11 +85,11 @@ const ProFlowDemo = () => {
         }
     };
 
-
+    // fungsi simpan data node dan edge pada drop zone
     const saveData = useCallback(async () => {
         if (!editor) return;
 
-        const workflowName = name.trim() === '' ? `Untitled${Math.floor(new Date().getTime() / 1000)}` : name;
+        const workflowName = name.trim() === '' ? `Untitled - ${Math.floor(new Date().getTime() / 1000)}` : name;
 
         const nodes = editor.reactflow?.getNodes() || [];
         // if (!nodes || nodes.length === 0) {
@@ -122,7 +103,7 @@ const ProFlowDemo = () => {
         //     return;
         // }
 
-        //format backend
+        // struktur data sesuai backend yang akan disimpan
         const strukturData = {
             name: workflowName,
             nodesjson: nodes.map((node) => ({
@@ -175,6 +156,33 @@ const ProFlowDemo = () => {
         });
     }
 
+    // fungsi klik node
+    const handleNodeClick = useCallback((_event: React.MouseEvent, node: any) => {
+        setSelectedNode(node);
+        setDrawerVisible(true);
+        setTitle(node.data.title);
+        setIdPerangkat(node.data.idPerangkat);
+        setSize(node.data.size || 150);
+    }, []);
+
+    // fungsi update data pada drawer
+    // jika tidak diisi maka default idPerangkat(null) dan title(nodeTypes)
+    const handleSaveUpdateNode = async () => {
+        if (selectedNode && editor) {
+            // update node data sama idPerangkat dan title
+            editor.updateNodeData(selectedNode.id, {
+                ...selectedNode.data,
+                idPerangkat,
+                title,
+                size,
+            });
+            setDrawerVisible(false);
+            setIdPerangkat(null);
+            setTitle('');
+            message.success('Okay');
+        }
+    };
+
     return (
         <div className={styles.container}>
             <FlowEditor
@@ -187,6 +195,7 @@ const ProFlowDemo = () => {
                 flowProps={{
                     onDrop,
                     onDragOver,
+                    onNodeClick: handleNodeClick,
                     defaultEdgeOptions: {
                         type: 'smoothstep',
                         animated: true,
@@ -229,6 +238,81 @@ const ProFlowDemo = () => {
                     </ProCard>
                 </FlowPanel>
             </FlowEditor>
+
+            <DrawerForm
+                onOpenChange={setDrawerVisible}
+                open={drawerVisible}
+                title="Basic Setup"
+                resize={{
+                    maxWidth: window.innerWidth * 0.8,
+                    minWidth: 400,
+                }}
+                autoFocusFirstInput
+                drawerProps={{
+                    destroyOnClose: true,
+                }}
+                submitTimeout={2000}
+                onFinish={async () => {
+                    handleSaveUpdateNode();
+                    // console.log(values.name);
+                    // message.success('Berhasil disimpan');
+                    return true;
+                }}
+            >
+                {selectedNode && (
+                    <ProForm.Group>
+                        {/* <h3>{selectedNode.data.title}</h3>
+                        <h3>{selectedNode.id}</h3> */}
+                        <ProFormText
+                            name='title'
+                            label='Title'
+                            placeholder='Enter node title'
+                            fieldProps={{
+                                value: title,
+                                onChange: (e) => setTitle(e.target.value), // mengambil input title
+                            }}
+                        />
+
+                        <ProFormSelect
+                            width={"md"}
+                            showSearch
+                            name={'idPerangkat'}
+                            label={'Perangkat'}
+                            placeholder={'Pilih yang terbaik!'}
+                            fieldProps={{
+                                value: idPerangkat,
+                                onChange: (value) => setIdPerangkat(value as number | null),
+                            }}
+                            // rules={[
+                            //     {
+                            //         required: true,
+                            //         message: 'Status harus diisi!',
+                            //     },
+                            // ]}
+                            options={[
+                                { label: 'Device 1', value: 1 },
+                                { label: 'Device Dua', value: 2 },
+                                { label: 'Device 3', value: 3 },
+                                { label: 'Device Empat', value: 4 },
+                                { label: 'Device Full', value: 5 },
+                            ]}
+                        />
+
+                        <ProForm.Item
+                            label="Size"
+                            name="size"
+                        >
+                            <Slider
+                                min={150}
+                                max={500}
+                                value={size}
+                                onChange={(value) => setSize(value || 150)}
+                                style={{ width: 320 }}
+                            />
+                        </ProForm.Item>
+                    </ProForm.Group>
+                )}
+            </DrawerForm>
         </div>
     );
 };
