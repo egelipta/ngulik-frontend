@@ -184,6 +184,20 @@ export default [
     ],
   },
 
+  {
+    path: '/cloud-configuration',
+    name: 'Cloud Configuration',
+    icon: 'AntCloudOutlined',
+    component: './CloudConfiguration',
+  },
+  {
+    path: '/cloud-configuration/add-data',
+    name: 'Add Data',
+    icon: 'AntCloudOutlined',
+    component: './CloudConfiguration/Editor/add-data',
+    hideInMenu: true
+  },
+
   // {
   //   path: '/three-js',
   //   name: 'THREE JS',
