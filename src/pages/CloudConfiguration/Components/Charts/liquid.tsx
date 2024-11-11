@@ -12,7 +12,7 @@ const ChartLiquid = (node: any) => {
     const {
         idDevice,
         size,
-        colorLiquid
+        color
     } = data;
 
     useEffect(() => {
@@ -28,31 +28,37 @@ const ChartLiquid = (node: any) => {
     }, [idDevice]);
 
     const config = {
-        percent: percent,
+        percent: percent / 100,
         style: {
             width: size,
             height: size,
         },
-        color: colorLiquid,
+        color: color,
         outline: {
-            border: 5,
-            distance: 8,
+            border: 4,
+            distance: 2,
         },
         wave: {
             length: 128,
         },
         statistic: {
             content: {
-                formatter: () => `${(percent * 100).toFixed(0)}%`,
+                formatter: () => `${(percent).toFixed(0)}%`,
+                style: { fontSize: '20px' }
             },
         },
     };
 
     return (
-        <ProCard bordered className={cx(selected && styles.selectedNode)}>
+        <ProCard bordered className={cx(selected && styles.selectedNode)}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            title={node.data.title}
+            headerBordered
+            hoverable
+        >
             <Liquid {...config} />
-            <Handle type={'source'} position={Position.Right} />
-            <Handle type={'target'} position={Position.Left} />
+            {/* <Handle type={'source'} position={Position.Right} />
+            <Handle type={'target'} position={Position.Left} /> */}
         </ProCard>
     );
 };

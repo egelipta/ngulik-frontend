@@ -40,17 +40,21 @@ const AddDataFlowEditor = () => {
         idDevice: number | null;
         size: number;
         nodeType: string;
-        colorGauge: string[];
-        colorCircle: string[];
-        colorLiquid: string;
+        color: string | string[];
+        min: number;
+        max: number;
+        batasBawah: number;
+        batasAtas: number;
     }>({
         title: '',
         idDevice: null,
-        size: 150,
+        size: 0,
         nodeType: '',
-        colorGauge: [''],
-        colorCircle: [''],
-        colorLiquid: '',
+        color: '',
+        min: 0,
+        max: 0,
+        batasBawah: 0,
+        batasAtas: 0,
     });
 
     // fungsi drag/ambil component di sidebar
@@ -81,11 +85,20 @@ const AddDataFlowEditor = () => {
                 position,
                 data: {
                     title: `${type}`,
-                    idPerangkat: null,
+                    idDevice: null,
                     size: 150,
-                    colorGauge: ['rgb(82, 196, 26)', 'rgb(250, 173, 20)', 'rgb(245, 34, 45)'],
-                    colorCircle: ['rgb(232, 239, 245)', 'rgb(102, 175, 244)',],
-                    colorLiquid: 'rgb(22, 135, 241)',
+                    color: type === 'ChartGauge'
+                        ? ['rgb(82, 196, 26)', 'rgb(250, 173, 20)', 'rgb(245, 34, 45)']
+                        : type === 'ProgressCircle'
+                            ? ['rgb(232, 239, 245)', 'rgb(102, 175, 244)']
+                            : 'rgb(22, 135, 241)',
+                    ...(type === 'ChartGauge' && {
+                        min: 0,
+                        max: 100,
+                        batasBawah: 40,
+                        batasAtas: 70,
+                    }),
+
                 },
             };
             console.log(newNode)

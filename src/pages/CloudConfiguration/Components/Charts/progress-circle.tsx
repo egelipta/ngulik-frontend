@@ -12,7 +12,7 @@ const ProgressCircle = (node: any) => {
     const {
         idDevice,
         size,
-        colorCircle
+        color
     } = data;
 
     // Memperbarui persen berdasarkan idDevice(id) dari dataPerangkat
@@ -28,7 +28,7 @@ const ProgressCircle = (node: any) => {
         }
     }, [idDevice]);
 
-    const roundedPercent = Math.round(percent * 100);
+    const roundedPercent = Math.round(percent);
 
     // Memodifikasi nilai agar tidak tampil putih polos jika persen bernilai 0
     const modifNilai = percent === 0 ? 0.0001 : percent;
@@ -37,10 +37,10 @@ const ProgressCircle = (node: any) => {
     const chartSize = size || 150;
 
     const config = {
-        percent: modifNilai,
+        percent: modifNilai / 100,
         width: chartSize,
         height: chartSize,
-        color: colorCircle,
+        color: color,
         annotations: [
             {
                 type: 'text',
@@ -57,10 +57,15 @@ const ProgressCircle = (node: any) => {
     };
 
     return (
-        <ProCard bordered className={cx(selected && styles.selectedNode)}>
+        <ProCard bordered className={cx(selected && styles.selectedNode)}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            title={node.data.title}
+            headerBordered
+            hoverable
+        >
             <Tiny.Ring {...config} />
-            <Handle type={'source'} position={Position.Right} />
-            <Handle type={'target'} position={Position.Left} />
+            {/* <Handle type={'source'} position={Position.Right} />
+            <Handle type={'target'} position={Position.Left} /> */}
         </ProCard>
     );
 };

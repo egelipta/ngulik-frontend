@@ -197,6 +197,13 @@ export default [
     component: './CloudConfiguration/Editor/add-data',
     hideInMenu: true
   },
+  {
+    path: '/cloud-configuration/dashboard/:idParam',
+    name: 'Dashboard',
+    icon: 'AntCloudOutlined',
+    component: './CloudConfiguration/Editor/dashboard',
+    hideInMenu: true
+  },
 
   // {
   //   path: '/three-js',
