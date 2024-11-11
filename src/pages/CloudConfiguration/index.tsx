@@ -42,7 +42,7 @@ export default memo(() => {
                         type="dashed"
                         shape="round"
                         onClick={() => {
-                            navigate(`/workflow-editor/editor/${d.id}`); // Menggunakan navigate untuk navigasi
+                            navigate(`/cloud-configuration/dashboard/${d.id}`); // Menggunakan navigate untuk navigasi
                             console.log(d.id);
                         }}
                     >

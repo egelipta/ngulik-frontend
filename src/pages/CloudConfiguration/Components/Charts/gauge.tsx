@@ -12,7 +12,11 @@ const ChartGauge = (node: any) => {
     const {
         idDevice,
         size,
-        colorGauge
+        color,
+        min,
+        max,
+        batasBawah,
+        batasAtas,
     } = data;
 
     useEffect(() => {
@@ -27,17 +31,23 @@ const ChartGauge = (node: any) => {
         }
     }, [idDevice]);
 
+    const nilai = (percent - min) / (max - min);
     const config = {
         style: {
             width: size,
             height: size,
         },
         autoFit: true,
-        percent: percent / 100,
+        percent: nilai,
         legend: false,
         range: {
-            ticks: [0, 0.3, 0.5, 1],
-            color: colorGauge,
+            ticks: [
+                0,
+                (batasBawah - min) / (max - min),
+                (batasAtas - min) / (max - min),
+                1,
+            ],
+            color: color,
         },
         statistic: {
             content: {
@@ -51,18 +61,23 @@ const ChartGauge = (node: any) => {
         },
         axis: {
             label: {
-                formatter: (value: string) => {
-                    return `${Number(value) * 100}`;
+                formatter: (v: string) => {
+                    return (Number(v) * (max - min) + min).toFixed(0)
                 },
             },
         },
     };
 
     return (
-        <ProCard bordered className={cx(selected && styles.selectedNode)}>
+        <ProCard bordered className={cx(selected && styles.selectedNode)}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            title={node.data.title}
+            headerBordered
+            hoverable
+        >
             <Gauge {...config} />
-            <Handle type={'source'} position={Position.Right} />
-            <Handle type={'target'} position={Position.Left} />
+            {/* <Handle type={'source'} position={Position.Right} />
+            <Handle type={'target'} position={Position.Left} /> */}
         </ProCard>
     );
 };

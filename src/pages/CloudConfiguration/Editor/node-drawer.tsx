@@ -1,6 +1,7 @@
-import { DrawerForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { DrawerForm, ProForm, ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { ColorPicker, Slider, Space } from 'antd';
 import { AggregationColor } from 'antd/es/color-picker/color';
+import { ColorValueType } from 'antd/es/color-picker/interface';
 import React from 'react';
 
 interface NodeDrawerProps {
@@ -13,18 +14,22 @@ interface NodeDrawerProps {
         idDevice: number | null;
         size: number;
         nodeType: string;
-        colorGauge: string[];
-        colorCircle: string[];
-        colorLiquid: string;
+        color: string | string[];
+        min: number;
+        max: number;
+        batasBawah: number;
+        batasAtas: number;
     };
     setNodeData: (data: {
         title: string;
         idDevice: number | null;
         size: number;
         nodeType: string;
-        colorGauge: string[];
-        colorCircle: string[];
-        colorLiquid: string;
+        color: string | string[];
+        min: number;
+        max: number;
+        batasBawah: number;
+        batasAtas: number;
     }) => void;
 }
 
@@ -90,7 +95,7 @@ const NodeDrawer: React.FC<NodeDrawerProps> = ({
             >
                 <Slider
                     min={150}
-                    max={500}
+                    max={300}
                     defaultValue={nodeData.size}
                     onChange={(value) => setNodeData({ ...nodeData, size: value })}
                 />
@@ -99,39 +104,82 @@ const NodeDrawer: React.FC<NodeDrawerProps> = ({
             {/* GAUGE */}
             {nodeType === 'ChartGauge' && (
                 <ProForm.Group>
+                    <Space>
+                        <ProFormDigit
+                            label="Nilai Min"
+                            name="min"
+                            initialValue={nodeData.min}
+                            width={150}
+                            min={-100}
+                            max={100}
+                            fieldProps={{
+                                onChange: (value: number | null) => {
+                                    setNodeData({ ...nodeData, min: value ?? 0 });
+                                },
+                            }}
+                        />
+
+                        <ProFormDigit
+                            label="Nilai Max"
+                            name="max"
+                            initialValue={nodeData.max}
+                            width={150}
+                            min={0}
+                            max={1000}
+                            fieldProps={{
+                                onChange: (value: number | null) => {
+                                    setNodeData({ ...nodeData, max: value ?? 100 });
+                                },
+                            }}
+                        />
+                    </Space>
                     <ProForm.Item
                         name={'colorGauge'}
                         label={'Warna'}
                     >
                         <Space>
-                            {nodeData.colorGauge.map((colorGauge, index) => (
+                            {Array.isArray(nodeData.color) && nodeData.color.map((color: ColorValueType | undefined, index) => (
                                 <ColorPicker
                                     key={index}
-                                    defaultValue={colorGauge}
+                                    defaultValue={color}
                                     onChange={(_value: AggregationColor, css: string) => {
-                                        const newColors = [...nodeData.colorGauge];
+                                        const newColors = [...nodeData.color];
                                         newColors[index] = css;
-                                        setNodeData({ ...nodeData, colorGauge: newColors });
+                                        setNodeData({ ...nodeData, color: newColors });
                                     }}
                                 />
                             ))}
+
                         </Space>
                     </ProForm.Item>
-
-                    {/* <ProFormDigit
-                        label="Jarak 0 - ..."
-                        name="range"
-                        initialValue={nodeData.range}
-                        width="md"
-                        min={50}
-                        max={1000}
-                        fieldProps={{
-                            onChange: (value: number | null) => {
-                                setNodeData({ ...nodeData, range: value ?? 50 });
-                            },
-                        }}
-                    /> */}
-
+                    <Space>
+                        <ProFormDigit
+                            label="Batas Bawah"
+                            name="batasbawah"
+                            initialValue={nodeData.batasBawah}
+                            width={150}
+                            min={-100}
+                            max={1000}
+                            fieldProps={{
+                                onChange: (value: number | null) => {
+                                    setNodeData({ ...nodeData, batasBawah: value ?? 40 });
+                                },
+                            }}
+                        />
+                        <ProFormDigit
+                            label="Batas Atas"
+                            name="batasatas"
+                            initialValue={nodeData.batasAtas}
+                            width={150}
+                            min={-100}
+                            max={1000}
+                            fieldProps={{
+                                onChange: (value: number | null) => {
+                                    setNodeData({ ...nodeData, batasAtas: value ?? 70 });
+                                },
+                            }}
+                        />
+                    </Space>
                 </ProForm.Group>
             )}
             {/* PROGRESS */}
@@ -141,14 +189,14 @@ const NodeDrawer: React.FC<NodeDrawerProps> = ({
                     label={'Warna'}
                 >
                     <Space>
-                        {nodeData.colorCircle.map((colorCircle, index) => (
+                        {Array.isArray(nodeData.color) && nodeData.color.map((color: ColorValueType | undefined, index) => (
                             <ColorPicker
                                 key={index}
-                                value={colorCircle}
+                                defaultValue={color}
                                 onChange={(_value: AggregationColor, css: string) => {
-                                    const newColors = [...nodeData.colorCircle];
+                                    const newColors = [...nodeData.color];
                                     newColors[index] = css;
-                                    setNodeData({ ...nodeData, colorCircle: newColors });
+                                    setNodeData({ ...nodeData, color: newColors });
                                 }}
                             />
                         ))}
@@ -162,11 +210,12 @@ const NodeDrawer: React.FC<NodeDrawerProps> = ({
                     label={'Warna'}
                 >
                     <ColorPicker
-                        defaultValue={nodeData.colorLiquid}
+                        defaultValue={typeof nodeData.color === 'string' ? nodeData.color : nodeData.color[0] || ''}
                         onChange={(_value: AggregationColor, css: string) => {
-                            setNodeData({ ...nodeData, colorLiquid: css });
+                            setNodeData({ ...nodeData, color: css });
                         }}
                     />
+
                 </ProForm.Item>
             )}
 
