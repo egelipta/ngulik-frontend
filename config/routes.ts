@@ -129,26 +129,27 @@ export default [
   //   ],
   // },
 
-  {
-    path: '/workflow-editor',
-    name: 'workfloweditor',
-    icon: 'CreditCardOutlined',
-    component: './WorkFlowEditor',
-  },
-  {
-    path: '/workflow-editor/add-data',
-    name: 'Add Data',
-    icon: 'CreditCardOutlined',
-    component: './WorkFlowEditor/Editor/add',
-    hideInMenu: true
-  },
-  {
-    path: '/workflow-editor/editor/:idParam',
-    name: 'Review',
-    icon: 'CreditCardOutlined',
-    component: './WorkFlowEditor/Editor',
-    hideInMenu: true
-  },
+  //workflow editor
+  // {
+  //   path: '/workflow-editor',
+  //   name: 'workfloweditor',
+  //   icon: 'CreditCardOutlined',
+  //   component: './WorkFlowEditor',
+  // },
+  // {
+  //   path: '/workflow-editor/add-data',
+  //   name: 'Add Data',
+  //   icon: 'CreditCardOutlined',
+  //   component: './WorkFlowEditor/Editor/add',
+  //   hideInMenu: true
+  // },
+  // {
+  //   path: '/workflow-editor/editor/:idParam',
+  //   name: 'Review',
+  //   icon: 'CreditCardOutlined',
+  //   component: './WorkFlowEditor/Editor',
+  //   hideInMenu: true
+  // },
 
   {
     path: '/admin',
@@ -203,6 +204,15 @@ export default [
     icon: 'AntCloudOutlined',
     component: './CloudConfiguration/Editor/dashboard',
     hideInMenu: true
+  },
+
+  //HOME ASSISTANT
+  {
+    path: '/home-assistant',
+    name: 'Home Assistant',
+    icon: 'AppstoreAddOutlined',
+    component: './HomeAssistant',
+    hideInMenu: false
   },
 
   // {
