@@ -3,10 +3,11 @@ import React, { memo, useEffect, useState } from 'react';
 import { workfloweditorApiV1WorkfloweditorWorkfloweditorGetDataGet } from '@/services/pjvms/workflowEditor';
 import { useParams } from 'react-router-dom';
 import { Col, Row } from 'antd';
-
+import '../css/style.css';
 import ChartGauge from '../Components/Charts/gauge';
 import ProgressCircle from '../Components/Charts/progress-circle';
 import ChartLiquid from '../Components/Charts/liquid';
+import Masonry from 'react-masonry-css';
 
 // Define the valid node types as a union type
 type NodeType = 'ChartGauge' | 'ProgressCircle' | 'ChartLiquid';
@@ -38,33 +39,32 @@ export default memo(() => {
         getDataWorkflow();
     }, []);
 
-    const judul = datas.map((dataItem) => dataItem.name);
+    // const judul = datas.map((dataItem) => dataItem.name);
+    const breakpointColumns = {
+        default: 4,
+        1600: 3,
+        1200: 2,
+        700: 1,
+    };
 
     return (
-        <PageContainer extra={judul}>
-            {datas.map((dataItem, index) => (
-                <Row gutter={[5, 5]} key={index}>
-                    {dataItem.nodesjson.map((node: any, nodeIndex: number) => {
-                        // Make sure node.type is one of the keys in nodeTypes
+        <PageContainer>
+            <Masonry
+                breakpointCols={breakpointColumns}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+            >
+                {datas.map((d) =>
+                    d.nodesjson.map((node: any) => {
                         const NodeComponent = nodeTypes[node.type as NodeType];
-
-                        return (
-                            <Col key={nodeIndex} span={6}>
-                                {/* <ProCard style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> */}
-
-                                {NodeComponent && (
-                                    <NodeComponent
-                                        // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                                        selected={false}
-                                        data={node.data}
-                                    />
-                                )}
-                                {/* </ProCard> */}
-                            </Col>
-                        );
-                    })}
-                </Row>
-            ))}
+                        return NodeComponent ? (
+                            <div key={node.id} className="masonry-item">
+                                <NodeComponent data={node.data} />
+                            </div>
+                        ) : null;
+                    })
+                )}
+            </Masonry>
         </PageContainer>
     );
 });
