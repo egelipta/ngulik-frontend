@@ -2,8 +2,13 @@ import React, { memo } from 'react';
 import { Pie } from '@ant-design/plots';
 import ProCard from '@ant-design/pro-card';
 
-const ChartPie = memo(() => {
-    const data = [
+interface ChartPieProps {
+    data?: any[]; // Properti opsional untuk menerima data dari luar
+}
+
+const ChartPie = memo(({ data }: ChartPieProps) => {
+
+    const dataDummy = [
         {
             type: 'Data 1',
             value: 27,
@@ -36,7 +41,7 @@ const ChartPie = memo(() => {
         },
         legend: false,
         appendPadding: 0,
-        data,
+        data: data || dataDummy,
         angleField: 'value',
         colorField: 'type',
         radius: 1,

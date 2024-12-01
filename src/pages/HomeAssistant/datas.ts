@@ -1,4 +1,4 @@
-export const deviceData = [
+export const dataTunggal = [
     {
         "id": 1,
         "name": "Device 1 - 35",
@@ -38,57 +38,173 @@ export const deviceData = [
 
 export const dataLine = [
     {
-        "id": 1,
-        "name": 'Line 1',
+        "id": 101,
+        "name": 'Data Line 1',
         "value":
             [
                 {
                     "Date": '1991',
-                    "scale": 3,
+                    "scales": 3,
                 },
                 {
                     "Date": '1992',
-                    "scale": 4,
+                    "scales": 4,
                 },
                 {
                     "Date": '1993',
-                    "scale": 3.5,
+                    "scales": 3.5,
                 },
                 {
                     "Date": '1994',
-                    "scale": 5,
+                    "scales": 5,
                 },
                 {
                     "Date": '1995',
-                    "scale": 4.9,
+                    "scales": 4.9,
                 },
             ]
     },
     {
-        "id": 2,
-        "name": 'Line 2',
+        "id": 102,
+        "name": 'Data Line 2',
         "value":
             [
                 {
                     "Date": '1991',
-                    "scale": 10,
+                    "scales": 10,
                 },
                 {
                     "Date": '1992',
-                    "scale": 4,
+                    "scales": 4,
                 },
                 {
                     "Date": '1993',
-                    "scale": 5,
+                    "scales": 5,
                 },
                 {
                     "Date": '1994',
-                    "scale": 1,
+                    "scales": 1,
                 },
                 {
                     "Date": '1995',
-                    "scale": 8,
+                    "scales": 8,
+                },
+            ]
+    },
+    {
+        "id": 103,
+        "name": "Data Line 3",
+        "value":
+            [
+                {
+                    "Date": '1991',
+                    "scales": 3,
+                },
+                {
+                    "Date": '1992',
+                    "scales": 4,
+                },
+                {
+                    "Date": '1993',
+                    "scales": 3.5,
+                },
+                {
+                    "Date": '1994',
+                    "scales": 5,
+                },
+                {
+                    "Date": '1995',
+                    "scales": 4.9,
+                },
+                {
+                    "Date": '1996',
+                    "scales": 6,
+                },
+                {
+                    "Date": '1997',
+                    "scales": 7,
+                },
+                {
+                    "Date": '1998',
+                    "scales": 9,
+                },
+                {
+                    "Date": '1999',
+                    "scales": 13,
                 },
             ]
     },
 ];
+
+export const dataPie = [
+    {
+        "id": 201,
+        "name": "Data Pie 1",
+        "value": [
+            {
+                "type": 'Data 1',
+                "value": 1,
+            },
+            {
+                "type": 'Data 2',
+                "value": 3,
+            },
+            {
+                "type": 'Data 3',
+                "value": 5,
+            },
+            {
+                "type": 'Data 4',
+                "value": 15,
+            },
+            {
+                "type": 'Data 5',
+                "value": 10,
+            },
+            {
+                "type": 'Data 6',
+                "value": 7,
+            },
+        ]
+    },
+    {
+        "id": 202,
+        "name": "Data Pie 2",
+        "value": [
+            {
+                "type": 'Data 1',
+                "value": 1,
+            },
+            {
+                "type": 'Data 2',
+                "value": 3,
+            },
+            {
+                "type": 'Data 3',
+                "value": 5,
+            },
+        ]
+    },
+    {
+        "id": 203,
+        "name": "Data Pie 3",
+        "value": [
+            {
+                "type": 'Data 1',
+                "value": 1,
+            },
+            {
+                "type": 'Data 2',
+                "value": 3,
+            },
+            {
+                "type": 'Data 3',
+                "value": 5,
+            },
+            {
+                "type": 'Data 4',
+                "value": 25,
+            },
+        ]
+    }
+]
