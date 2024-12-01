@@ -1,91 +1,210 @@
-export const chartData = [
+export const dataTunggal = [
     {
         "id": 1,
-        "datachart": {
-            "name": "Data 1",
-            "percent": 20,
-            "unit": "'C",
-            "type": "ChartGauge",
-            "data": {
-                "color": [
-                    "#F4664A",
-                    "#FAAD14",
-                    "#30BF78"
-                ],
-                "min": -10,
-                "max": 40,
-                "bawah": 18,
-                "atas": 28
-            }
-        }
+        "name": "Device 1 - 35",
+        "value": 35,
     },
     {
         "id": 2,
-        "datachart": {
-            "name": "Data 2",
-            "percent": 80,
-            "unit": " Liter",
-            "type": "ChartLiquid",
-            "data": {
-                "color": "#0db149"
-            }
-        }
+        "name": "Device 2 -23 ",
+        "value": 23,
     },
     {
         "id": 3,
-        "datachart": {
-            "name": "Data 3",
-            "percent": 49,
-            "unit": " Spin",
-            "type": "ChartRing",
-            "data": {
-                "color": [
-                    "#5B8FF9",
-                    "#E8EDF3"
-                ]
-            }
-        }
+        "name": "Device 3 - 67",
+        "value": 67,
     },
     {
         "id": 4,
-        "datachart": {
-            "name": "Kecepatan",
-            "percent": 96,
-            "unit": " km/h",
-            "type": "ChartGauge",
-            "data": {
-                "color": [
-                    "#30bf78",
-                    "#FAAD14",
-                    "#f5503e"
-                ],
-                "min": 0,
-                "max": 200,
-                "bawah": 80,
-                "atas": 120
-            }
-        }
+        "name": "Device 4 - 71",
+        "value": 71,
     },
     {
         "id": 5,
-        "datachart": {
-            "name": "Pro Card",
-            "percent": 15,
-            "unit": "%",
-            "type": "Texts",
-            "data": {
-                "texts": "In-page container cards that provide standard card styles, card segmentation and grid layout capabilities. ProCard creatively combines Col, Row, Card, Tabs and other component implementations together, allowing you to complete various card-related layouts with only one component."
-            }
-        }
+        "name": "Device 5 -100",
+        "value": 100,
     },
     {
         "id": 6,
-        "datachart": {
-            "name": "ChartStatistic",
-            "percent": 54,
-            "unit": " volt",
-            "type": "ChartStatistic",
-            "data": {}
-        }
+        "name": "Device 6 - 11",
+        "value": 11,
+    },
+    {
+        "id": 7,
+        "name": "Device 7 -234",
+        "value": 234,
+    },
+];
+
+export const dataLine = [
+    {
+        "id": 101,
+        "name": 'Data Line 1',
+        "value":
+            [
+                {
+                    "Date": '1991',
+                    "scales": 3,
+                },
+                {
+                    "Date": '1992',
+                    "scales": 4,
+                },
+                {
+                    "Date": '1993',
+                    "scales": 3.5,
+                },
+                {
+                    "Date": '1994',
+                    "scales": 5,
+                },
+                {
+                    "Date": '1995',
+                    "scales": 4.9,
+                },
+            ]
+    },
+    {
+        "id": 102,
+        "name": 'Data Line 2',
+        "value":
+            [
+                {
+                    "Date": '1991',
+                    "scales": 10,
+                },
+                {
+                    "Date": '1992',
+                    "scales": 4,
+                },
+                {
+                    "Date": '1993',
+                    "scales": 5,
+                },
+                {
+                    "Date": '1994',
+                    "scales": 1,
+                },
+                {
+                    "Date": '1995',
+                    "scales": 8,
+                },
+            ]
+    },
+    {
+        "id": 103,
+        "name": "Data Line 3",
+        "value":
+            [
+                {
+                    "Date": '1991',
+                    "scales": 3,
+                },
+                {
+                    "Date": '1992',
+                    "scales": 4,
+                },
+                {
+                    "Date": '1993',
+                    "scales": 3.5,
+                },
+                {
+                    "Date": '1994',
+                    "scales": 5,
+                },
+                {
+                    "Date": '1995',
+                    "scales": 4.9,
+                },
+                {
+                    "Date": '1996',
+                    "scales": 6,
+                },
+                {
+                    "Date": '1997',
+                    "scales": 7,
+                },
+                {
+                    "Date": '1998',
+                    "scales": 9,
+                },
+                {
+                    "Date": '1999',
+                    "scales": 13,
+                },
+            ]
+    },
+];
+
+export const dataPie = [
+    {
+        "id": 201,
+        "name": "Data Pie 1",
+        "value": [
+            {
+                "type": 'Data 1',
+                "value": 1,
+            },
+            {
+                "type": 'Data 2',
+                "value": 3,
+            },
+            {
+                "type": 'Data 3',
+                "value": 5,
+            },
+            {
+                "type": 'Data 4',
+                "value": 15,
+            },
+            {
+                "type": 'Data 5',
+                "value": 10,
+            },
+            {
+                "type": 'Data 6',
+                "value": 7,
+            },
+        ]
+    },
+    {
+        "id": 202,
+        "name": "Data Pie 2",
+        "value": [
+            {
+                "type": 'Data 1',
+                "value": 1,
+            },
+            {
+                "type": 'Data 2',
+                "value": 3,
+            },
+            {
+                "type": 'Data 3',
+                "value": 5,
+            },
+        ]
+    },
+    {
+        "id": 203,
+        "name": "Data Pie 3",
+        "value": [
+            {
+                "type": 'Data 1',
+                "value": 1,
+            },
+            {
+                "type": 'Data 2',
+                "value": 3,
+            },
+            {
+                "type": 'Data 3',
+                "value": 5,
+            },
+            {
+                "type": 'Data 4',
+                "value": 25,
+            },
+        ]
     }
 ]

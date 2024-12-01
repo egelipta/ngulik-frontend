@@ -1,6 +1,14 @@
 import React, { memo, useState, useEffect } from 'react';
-import ProForm, { ModalForm, ProFormDigit, ProFormSlider, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { message, ColorPicker, Row, Col, Space } from 'antd';
+import ProForm, { ModalForm } from '@ant-design/pro-form';
+import { message, Row, Col } from 'antd';
+// import { dataLine } from '../datas';
+import { homeAssistantAddApiV1HomeAssistantHomeassistantAddDataPost } from '@/services/pjvms/homeAssistant';
+import FormGauge from '../FormAddComponent/form-gauge';
+import FormLine from '../FormAddComponent/form-line';
+import FormLiquid from '../FormAddComponent/form-liquid';
+import FormRing from '../FormAddComponent/form-ring';
+import FormTexts from '../FormAddComponent/form-text';
+import FormPie from '../FormAddComponent/form-pie';
 
 interface IProps {
     visible: boolean;
@@ -9,42 +17,89 @@ interface IProps {
 }
 
 const AddComponent = memo(({ visible, onClose, SelectedComponent }: IProps) => {
-    const componentType = SelectedComponent?.name; // type komponen yang dipilih
+
+    const componentType = SelectedComponent?.name; // AMBIL TYPE COMPONENT
+
+    const getColor = (type: any) => {
+        if (type === 'ChartGauge') {
+            return ['#F4664A', '#FAAD14', '#30BF78']
+        } else if (type === 'ChartRing') {
+            return ['#5B8FF9', '#E8EDF3'];
+        } else if (type === 'ChartLiquid') {
+            return '#5B8FF9';
+        } return '';
+    };
 
     const initialConfig = {
         name: componentType,
-        percent: 15,
-        color: componentType === 'ChartLiquid' ? '#5B8FF9'
-            : componentType === 'ChartRing' ? ['#5B8FF9', '#E8EDF3']
-                : componentType === 'ChartGauge' ? ['#F4664A', '#FAAD14', '#30BF78']
-                    : '',
+        devid: 0,
+        percent: 0,
+        data: [],
+        conditions: 'default',
+        color: getColor(componentType),
         min: 0,
         max: 100,
-        bawah: 30,
-        atas: 60,
+        lower: 20,
+        normallower: 40,
+        normalupper: 60,
+        upper: 80,
         unit: '%',
-        texts: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsum, reprehenderit.',
+        texts: 'Lorem ipsum dolor sit amet consectetur, ChartGaugeadipisicing elit. Ipsum, reprehenderit.',
     };
 
     const [config, setConfig] = useState(initialConfig);
 
-    // Update config when the SelectedComponent changes
+    const renderForm = () => {
+        if (componentType === 'ChartGauge') {
+            return <FormGauge config={config} handleChange={handleChange} />;
+        } else if (componentType === 'ChartLine') {
+            return <FormLine config={config} handleChange={handleChange} />;
+        } else if (componentType === 'ChartLiquid') {
+            return <FormLiquid config={config} handleChange={handleChange} />;
+        } else if (componentType === 'ChartRing') {
+            return <FormRing config={config} handleChange={handleChange} />;
+        } else if (componentType === 'Texts') {
+            return <FormTexts config={config} handleChange={handleChange} />;
+        } else if (componentType === 'ChartPie') {
+            return <FormPie config={config} handleChange={handleChange} />;
+        }
+        return null;
+    };
+
+    // PERBARUI config KETIKA SelectedComponent BERUBAH
     useEffect(() => {
-        setConfig(initialConfig); // Update config saat komponen dipilih
+        setConfig(initialConfig); //PERBARUI config SAAT COMPONENT DIPILIH
     }, [SelectedComponent]);
 
+
+    const updateColorByCondition = (condition: string) => {
+        if (condition === 'min-max') {
+            return ['#F4664A', '#FAAD14', '#30BF78', '#FAAD14', '#F4664A']; // 5 warna
+        } else if (condition === 'default') {
+            return ['#F4664A', '#FAAD14', '#30BF78']; // 3 warna
+        }
+        return config.color;
+    };
+
+    const [form] = ProForm.useForm();
     const handleChange = (field: string, value: any, index?: number) => {
+        form.setFieldsValue({ [field]: value }); //value dataTunggal
         setConfig((prev) => {
+            if (field === 'conditions') {
+                const updatedColor = updateColorByCondition(value);
+                return { ...prev, [field]: value, color: updatedColor };
+            }
+
             if (field === 'color') {
                 if (Array.isArray(prev.color)) {
-                    // Handle array case for ChartGauge
+                    // COLOR DALAM BENTUK ARRAY
                     if (typeof index === 'number') {
                         const newColorRange = [...prev.color];
                         newColorRange[index] = value;
                         return { ...prev, color: newColorRange };
                     }
                 } else {
-                    // Handle single color case for ChartLiquid
+                    // COLOR DALAM BENTUK TUNGGAL
                     return { ...prev, color: value };
                 }
             }
@@ -52,35 +107,57 @@ const AddComponent = memo(({ visible, onClose, SelectedComponent }: IProps) => {
         });
     };
 
+    const createData = async (values: API.CreateHomeAssistant) => {
+        try {
+            const result = await homeAssistantAddApiV1HomeAssistantHomeassistantAddDataPost(values);
+            return result;
+        } catch (error) {
+            console.error('Error during API call:', error);
+            throw error;
+        }
+    };
+
     const handleFinish = async (val: any) => {
+        // Prepare the formatted data
         const formattedData = {
-            name: val.name,
-            percent: val.percent,
-            unit: val.unit,
-            type: componentType,
-            data: componentType === 'ChartGauge'
-                ? {
+            datachart: {
+                name: val.name,
+                devid: val.devid,
+                unit: val.unit,
+                type: componentType ?? '',
+                datas: {
+                    texts: val.texts,
                     color: config.color,
                     min: val.min,
                     max: val.max,
-                    bawah: val.bawah,
-                    atas: val.atas,
-                }
-                : componentType === 'ChartLiquid'
-                    ? {
-                        color: config.color,
-                    }
-                    : componentType === 'ChartRing'
-                        ? { color: config.color }
-                        : componentType === 'Texts'
-                            ? { texts: val.texts }
-                            : {}
+                    conditions: val.conditions,
+                    ...(val.conditions === 'min-max' ? {
+                        lower: val.lower,
+                        normallower: val.normallower,
+                        normalupper: val.normalupper,
+                        upper: val.upper,
+                    } : {
+                        lower: val.lower,
+                        upper: val.upper,
+                    })
+                },
+                // ...(componentType === 'Texts' ? { data: { texts: val.texts } } : {}),
+                // ...(componentType === 'ChartStatistic' ? { data: {} } : {}),
+            }
         };
 
         console.log('SAVE DATA:', formattedData);
-        message.success('Data berhasil ditambahkan!');
-        setConfig(initialConfig);
-        onClose();
+
+        try {
+            await createData(formattedData); // Pass formattedData to createData
+            message.success('Data berhasil ditambahkan!');
+            setConfig(initialConfig);
+            onClose();
+        } catch (error) {
+            console.error('Error saving data:', error);
+            message.error('Gagal menambahkan data. Silakan coba lagi.');
+        }
+
         return true;
     };
 
@@ -100,182 +177,10 @@ const AddComponent = memo(({ visible, onClose, SelectedComponent }: IProps) => {
             onFinish={handleFinish}
         >
             <Row gutter={[10, 10]}>
-                <Col xxl={16} xl={16} md={16} sm={24} xs={24}>
-
-                    {/* GENERAL */}
-                    <ProFormText
-                        label={'Name'}
-                        name={'name'}
-                        initialValue={componentType}
-                        placeholder={'Fill the name...'}
-                        fieldProps={{
-                            onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleChange('name', e.target.value),
-                        }}
-                    />
-                    <ProFormText
-                        label={'Unit'}
-                        name={'unit'}
-                        width={'xs'}
-                        placeholder={'Unit...'}
-                        initialValue={config.unit}
-                        fieldProps={{
-                            onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleChange('unit', e.target.value),
-                        }}
-                    />
-                    <ProFormSlider
-                        name="percent"
-                        label="Device"
-                        min={0}
-                        max={100}
-                        initialValue={config.percent}
-                        fieldProps={{
-                            onChange: (value: any) => handleChange('percent', value),
-                        }}
-                    />
-
-                    {/* GAUGE */}
-                    {componentType === 'ChartGauge' && (
-                        <>
-                            <ProForm.Group>
-                                <ProFormDigit
-                                    label={'Min'}
-                                    name={'min'}
-                                    width={'xs'}
-                                    min={-100}
-                                    max={1000}
-                                    placeholder={'Min...'}
-                                    initialValue={config.min}
-                                    fieldProps={{
-                                        onChange: (value: any) => handleChange('min', value),
-                                    }}
-                                />
-                                <ProFormDigit
-                                    label={'Max'}
-                                    name={'max'}
-                                    width={'xs'}
-                                    min={-100}
-                                    max={1000}
-                                    placeholder={'Max...'}
-                                    initialValue={config.max}
-                                    fieldProps={{
-                                        onChange: (value: any) => handleChange('max', value),
-                                    }}
-                                />
-                                <ProFormDigit
-                                    label={'Batas Bawah'}
-                                    name={'bawah'}
-                                    width={'xs'}
-                                    min={-100}
-                                    max={1000}
-                                    placeholder={'Batas Bawah...'}
-                                    initialValue={config.bawah}
-                                    fieldProps={{
-                                        onChange: (value: any) => handleChange('bawah', value),
-                                    }}
-                                />
-                                <ProFormDigit
-                                    label={'Batas Atas'}
-                                    name={'atas'}
-                                    width={'xs'}
-                                    min={-100}
-                                    max={1000}
-                                    placeholder={'Batas Atas...'}
-                                    initialValue={config.atas}
-                                    fieldProps={{
-                                        onChange: (value: any) => handleChange('atas', value),
-                                    }}
-                                />
-                            </ProForm.Group>
-                            <ProForm.Item
-                                label={'Color'}
-                                name={'color'}
-                            >
-                                <Space>
-                                    {Array.isArray(config.color) // Cek jika color dalam bentuk array
-                                        ? config.color.map((color, index) => (
-                                            <ColorPicker
-                                                key={index}
-                                                value={color}
-                                                onChange={(value) =>
-                                                    handleChange('color', value.toHexString(), index)
-                                                }
-                                            />
-                                        ))
-                                        : (
-                                            <ColorPicker
-                                                value={config.color}
-                                                onChange={(value) =>
-                                                    handleChange('color', value.toHexString())
-                                                }
-                                            />
-                                        )}
-                                </Space>
-                            </ProForm.Item>
-                        </>
-                    )}
-
-                    {/* LIQUID */}
-                    {componentType === 'ChartLiquid' && (
-                        <>
-                            <ProForm.Item
-                                label={'Color'}
-                                name={'color'}
-                            >
-                                <Space>
-                                    {/* jika color tunggal */}
-                                    <ColorPicker
-                                        value={typeof config.color === 'string' ? config.color : undefined}
-                                        onChange={(value) =>
-                                            handleChange('color', value.toHexString())
-                                        }
-                                    />
-                                </Space>
-                            </ProForm.Item>
-                        </>
-                    )}
-
-                    {/* RING */}
-                    {componentType === 'ChartRing' && (
-                        <ProForm.Item
-                            label={'Color'}
-                            name={'color'}
-                        >
-                            <Space>
-                                {Array.isArray(config.color) // Cek jika color dalam bentuk array
-                                    ? config.color.map((color, index) => (
-                                        <ColorPicker
-                                            key={index}
-                                            value={color}
-                                            onChange={(value) =>
-                                                handleChange('color', value.toHexString(), index)
-                                            }
-                                        />
-                                    ))
-                                    : (
-                                        <ColorPicker
-                                            value={config.color}
-                                            onChange={(value) =>
-                                                handleChange('color', value.toHexString())
-                                            }
-                                        />
-                                    )}
-                            </Space>
-                        </ProForm.Item>
-                    )}
-
-                    {/* TEXTS */}
-                    {componentType === 'Texts' && (
-                        <ProFormTextArea
-                            width="xl"
-                            label="Texts"
-                            name="texts"
-                            initialValue={config.texts}
-                            fieldProps={{
-                                onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('texts', e.target.value),
-                            }}
-                        />
-                    )}
-
+                {/* <Col xxl={16} xl={16} md={16} sm={24} xs={24} style={{ backgroundColor: '#fafafa', padding: 10 }}> */}
+                <Col xxl={16} xl={16} md={16} sm={24} xs={24} style={{ backgroundColor: '#fafafa', padding: 15, height: '570px', overflowY: 'auto', }}>
+                    {/* Form Add Component */}
+                    {renderForm()}
                 </Col>
                 <Col xxl={8} xl={8} md={8} sm={24} xs={24}>
                     <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>

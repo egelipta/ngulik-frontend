@@ -5,25 +5,47 @@ import ProCard from '@ant-design/pro-card';
 // Properti untuk ChartGauge
 interface ChartGaugeProps {
     percent?: number;
+    conditions?: string;
     color?: string[];
     min?: number;
     max?: number;
-    bawah?: number;
-    atas?: number;
+    lower?: number;
+    normallower?: number;
+    normalupper?: number;
+    upper?: number;
     unit?: string;
 }
 
 const ChartGauge = memo(({
-    percent = 15,
+    percent = 45,
+    conditions = 'default',
     color = ['#F4664A', '#FAAD14', '#30BF78'],
     min = 0,
     max = 100,
-    bawah = 30,
-    atas = 60,
+    lower = 20,
+    normallower = 40,
+    normalupper = 60,
+    upper = 80,
     unit = '%'
 }: ChartGaugeProps) => {
 
     const nilai = (percent - min) / (max - min);
+
+    //TICKS
+    const limit = conditions === 'min-max'
+        ? [
+            0,
+            (lower - min) / (max - min),
+            (normallower - min) / (max - min),
+            (normalupper - min) / (max - min),
+            (upper - min) / (max - min),
+            1,
+        ] : [
+            0,
+            (lower - min) / (max - min),
+            (upper - min) / (max - min),
+            1,
+        ]
 
     const config = {
         style: {
@@ -32,12 +54,7 @@ const ChartGauge = memo(({
         },
         percent: nilai,
         range: {
-            ticks: [
-                0,
-                (bawah - min) / (max - min),
-                (atas - min) / (max - min),
-                1,
-            ],
+            ticks: limit,
             color: color,
         },
         indicator: {
@@ -56,7 +73,7 @@ const ChartGauge = memo(({
             content: {
                 formatter: () => `${percent}${unit}`,
                 style: {
-                    paddingTop: '5px',
+                    paddingTop: '7px',
                     fontSize: '15px',
                     fontWeight: 'bold',
                     color: '#444546',
