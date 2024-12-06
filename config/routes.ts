@@ -215,6 +215,15 @@ export default [
     hideInMenu: false
   },
 
+  //HOME ASSISTANT
+  {
+    path: '/configuration',
+    name: 'Configuration',
+    icon: 'AppstoreAddOutlined',
+    component: './Configuration',
+    hideInMenu: false
+  },
+
   // {
   //   path: '/three-js',
   //   name: 'THREE JS',
