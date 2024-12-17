@@ -7,7 +7,7 @@ interface IProps {
     handleChange: (field: string, value: any, index?: number) => void;
 }
 
-const FormLine: React.FC<IProps> = ({ config, handleChange }) => {
+const FormColumn: React.FC<IProps> = ({ config, handleChange }) => {
     return (
         <>
             <ProFormText
@@ -39,22 +39,8 @@ const FormLine: React.FC<IProps> = ({ config, handleChange }) => {
                 }}
                 rules={[{ required: true, message: 'Cannot be empty!' }]}
             />
-            <ProFormSelect
-                showSearch
-                width="sm"
-                name="stepType"
-                label="Type"
-                placeholder="Select type"
-                initialValue={config.stepType}
-                options={[
-                    { value: '', label: 'Default' },
-                    { value: 'hvh', label: 'Step' }
-                ]}
-                onChange={(value) => handleChange('stepType', value)}
-            // rules={[{ required: true, message: 'Cannot be empty!' }]}
-            />
         </>
     );
 };
 
-export default FormLine;
+export default FormColumn;

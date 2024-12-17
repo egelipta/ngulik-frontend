@@ -8,7 +8,12 @@ interface ChartRingProps {
     unit?: string;
 }
 
-const ChartRing = memo(({ percent = 15, color = ['#5B8FF9', '#E8EDF3'], unit = '%' }: ChartRingProps) => {
+const ChartRing = memo((
+    {
+        percent = 15,
+        color = ['#5B8FF9', '#E8EDF3'],
+        unit = '%'
+    }: ChartRingProps) => {
 
     const config = {
         height: 150,

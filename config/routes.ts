@@ -185,37 +185,37 @@ export default [
     ],
   },
 
-  {
-    path: '/cloud-configuration',
-    name: 'Cloud Configuration',
-    icon: 'AntCloudOutlined',
-    component: './CloudConfiguration',
-  },
-  {
-    path: '/cloud-configuration/add-data',
-    name: 'Add Data',
-    icon: 'AntCloudOutlined',
-    component: './CloudConfiguration/Editor/add-data',
-    hideInMenu: true
-  },
-  {
-    path: '/cloud-configuration/dashboard/:idParam',
-    name: 'Dashboard',
-    icon: 'AntCloudOutlined',
-    component: './CloudConfiguration/Editor/dashboard',
-    hideInMenu: true
-  },
+  // {
+  //   path: '/cloud-configuration',
+  //   name: 'Cloud Configuration',
+  //   icon: 'AntCloudOutlined',
+  //   component: './CloudConfiguration',
+  // },
+  // {
+  //   path: '/cloud-configuration/add-data',
+  //   name: 'Add Data',
+  //   icon: 'AntCloudOutlined',
+  //   component: './CloudConfiguration/Editor/add-data',
+  //   hideInMenu: true
+  // },
+  // {
+  //   path: '/cloud-configuration/dashboard/:idParam',
+  //   name: 'Dashboard',
+  //   icon: 'AntCloudOutlined',
+  //   component: './CloudConfiguration/Editor/dashboard',
+  //   hideInMenu: true
+  // },
 
   //HOME ASSISTANT
-  {
-    path: '/home-assistant',
-    name: 'Home Assistant',
-    icon: 'AppstoreAddOutlined',
-    component: './HomeAssistant',
-    hideInMenu: false
-  },
+  // {
+  //   path: '/home-assistant',
+  //   name: 'Home Assistant',
+  //   icon: 'AppstoreAddOutlined',
+  //   component: './HomeAssistant',
+  //   hideInMenu: false
+  // },
 
-  //HOME ASSISTANT
+  //CONFIGURATION
   {
     path: '/configuration',
     name: 'Configuration',

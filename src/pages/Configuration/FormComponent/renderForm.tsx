@@ -4,6 +4,10 @@ import FormLine from './form-line';
 import FormLiquid from './form-liquid';
 import FormRing from './form-ring';
 import FormPie from './form-pie';
+import FormMultiLine from './form-multi-line';
+import FormArea from './form-area';
+import FormColumn from './form-column';
+import FormRadar from './form-radar';
 
 interface RenderFormProps {
     type: string | undefined;
@@ -23,6 +27,14 @@ export const renderForm = ({ type, config, handleChange }: RenderFormProps) => {
             return <FormRing config={config} handleChange={handleChange} />;
         case 'ChartPie':
             return <FormPie config={config} handleChange={handleChange} />;
+        case 'ChartMultiLine':
+            return <FormMultiLine config={config} handleChange={handleChange} />;
+        case 'ChartArea':
+            return <FormArea config={config} handleChange={handleChange} />;
+        case 'ChartColumn':
+            return <FormColumn config={config} handleChange={handleChange} />;
+        case 'ChartRadar':
+            return <FormRadar config={config} handleChange={handleChange} />;
         default:
             return null;
     }
