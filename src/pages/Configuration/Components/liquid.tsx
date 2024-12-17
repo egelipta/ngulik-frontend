@@ -6,9 +6,10 @@ interface ChartLiquidProps {
     percent?: number;
     color?: string;
     unit?: string;
+    shape?: string,
 }
 
-const ChartLiquid = memo(({ percent = 15, color = '#5B8FF9', unit = '%' }: ChartLiquidProps) => {
+const ChartLiquid = memo(({ percent = 15, color = '#5B8FF9', unit = '%', shape }: ChartLiquidProps) => {
 
     // const capacity = 100;
     // const nilai = 1000;
@@ -21,7 +22,7 @@ const ChartLiquid = memo(({ percent = 15, color = '#5B8FF9', unit = '%' }: Chart
             width: 150,
         },
         color: color,
-        // shape: 'rect',
+        shape: shape,
         percent: percent / 100,
         outline: {
             border: 4,

@@ -20,25 +20,41 @@ const FormLiquid: React.FC<IProps> = ({ config, handleChange }) => {
                 }}
                 rules={[{ required: true, message: 'Cannot be empty!' }]}
             />
-            <ProFormSelect
-                showSearch
-                width="sm"
-                name="devid"
-                label="Device"
-                placeholder="Choose what you want!"
-                initialValue={config.devid}
-                options={dataTunggal.map((dt) => ({
-                    value: dt.id,
-                    label: dt.name,
-                }))}
-                onChange={(value) => {
-                    const selectedDevice = dataTunggal.find((dt) => dt.id === value);
-                    if (selectedDevice) {
-                        handleChange('percent', selectedDevice.value);
-                    }
-                }}
-                rules={[{ required: true, message: 'Cannot be empty!' }]}
-            />
+            <Space>
+                <ProFormSelect
+                    showSearch
+                    width="sm"
+                    name="devid"
+                    label="Device"
+                    placeholder="Choose what you want!"
+                    initialValue={config.devid}
+                    options={dataTunggal.map((dt) => ({
+                        value: dt.id,
+                        label: dt.name,
+                    }))}
+                    onChange={(value) => {
+                        const selectedDevice = dataTunggal.find((dt) => dt.id === value);
+                        if (selectedDevice) {
+                            handleChange('percent', selectedDevice.value);
+                        }
+                    }}
+                    rules={[{ required: true, message: 'Cannot be empty!' }]}
+                />
+                <ProFormSelect
+                    showSearch
+                    width="sm"
+                    name="shape"
+                    label="Shape"
+                    placeholder="Select type"
+                    initialValue={config.shape}
+                    options={[
+                        { value: '', label: 'Default' },
+                        { value: 'rect', label: 'Rect' },
+                        { value: 'diamond', label: 'Diamond' }
+                    ]}
+                    onChange={(value) => handleChange('shape', value)}
+                />
+            </Space>
             <ProFormText
                 label={'Unit'}
                 name={'unit'}

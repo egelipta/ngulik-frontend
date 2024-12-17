@@ -1,14 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Line } from '@ant-design/plots';
+import { Area } from '@ant-design/plots';
 import ProCard from '@ant-design/pro-card';
 
-interface ChartLineProps {
-    data?: any[]; // Properti opsional untuk menerima data dari luar
-    stepType?: string;
+interface ChartAreaProps {
+    data?: any[];
 }
 
-const ChartLine = memo(({ data, stepType }: ChartLineProps) => {
-    const [dataline, setDataline] = useState<any[]>([]);
+const ChartArea = memo(({ data }: ChartAreaProps) => {
+    const [dataArea, setDataline] = useState<any[]>([]);
 
     useEffect(() => {
         if (!data) {
@@ -26,18 +25,21 @@ const ChartLine = memo(({ data, stepType }: ChartLineProps) => {
     };
 
     const config = {
-        data: data || dataline, // Gunakan data dari props jika tersedia, atau data dari state
+        data: data || dataArea,
         xField: 'Date',
         yField: 'scales',
-        stepType: stepType,
-        // seriesField: 'key',
         xAxis: {
-            tickCount: 5,
+            range: [0, 1],
         },
         style: {
             width: 250,
             height: 150,
         },
+        // areaStyle: () => {
+        //     return {
+        //         fill: 'l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+        //     };
+        // },
     };
 
     return (
@@ -50,9 +52,9 @@ const ChartLine = memo(({ data, stepType }: ChartLineProps) => {
                 height: '100%',
             }}
         >
-            <Line {...config} />
+            <Area {...config} />
         </ProCard>
     );
 });
 
-export default ChartLine;
+export default ChartArea;

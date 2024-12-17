@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { ModalForm } from '@ant-design/pro-form';
 import TheComponent from '../Components/theComponent';
-import { dataTunggal, dataLine, dataPie } from '../Datas/data';
+import { dataTunggal, dataLine, dataPie, dataMultiLine } from '../Datas/data';
 import { Row, Col, message } from 'antd';
 import { renderForm } from '../FormComponent/renderForm';
 import { homeAssistantUpdateApiV1HomeAssistantHomeassistantUpdateDataPut } from '@/services/pjvms/homeAssistant';
@@ -21,6 +21,7 @@ const EditComponent = memo(({ visible, onClose, dataSelected, reload }: IProps) 
     const singleValue = dataTunggal.find((dt) => dt.id === dataSelected?.datachart?.devid);
     const lineValue = dataLine.find((dl) => dl.id === dataSelected?.datachart?.devid);
     const pieValue = dataPie.find((dp) => dp.id === dataSelected?.datachart?.devid);
+    const multiLine = dataMultiLine.find((dml) => dml.id === dataSelected?.datachart?.devid);
 
     // Konfigurasi default berdasarkan dataSelected
     const defaultConfig = {
@@ -29,7 +30,7 @@ const EditComponent = memo(({ visible, onClose, dataSelected, reload }: IProps) 
         devid: dataSelected?.datachart?.devid,
         unit: dataSelected?.datachart?.unit,
         percent: singleValue?.value,
-        data: lineValue?.value || pieValue?.value,
+        data: lineValue?.value || pieValue?.value || multiLine?.value,
         conditions: dataSelected?.datachart?.datas?.conditions,
         color: dataSelected?.datachart?.datas?.color,
         min: dataSelected?.datachart?.datas?.min,
@@ -38,6 +39,8 @@ const EditComponent = memo(({ visible, onClose, dataSelected, reload }: IProps) 
         normallower: dataSelected?.datachart?.datas?.normallower,
         normalupper: dataSelected?.datachart?.datas?.normalupper,
         upper: dataSelected?.datachart?.datas?.upper,
+        stepType: dataSelected?.datachart?.datas?.stepType,
+        shape: dataSelected?.datachart?.datas?.shape,
     };
 
     // State untuk menyimpan konfigurasi
@@ -134,6 +137,8 @@ const EditComponent = memo(({ visible, onClose, dataSelected, reload }: IProps) 
                 type: type ?? '',
                 unit: val.unit,
                 datas: {
+                    shape: val.shape,
+                    stepType: val.stepType,
                     color: config.color,
                     min: val.min,
                     max: val.max,

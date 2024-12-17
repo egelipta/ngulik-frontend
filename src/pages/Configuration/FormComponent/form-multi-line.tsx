@@ -1,13 +1,13 @@
 import React from 'react';
 import { ProFormText, ProFormSelect } from '@ant-design/pro-form';
-import { dataLine } from '../Datas/data';
+import { dataMultiLine } from '../Datas/data';
 
 interface IProps {
     config: any;
     handleChange: (field: string, value: any, index?: number) => void;
 }
 
-const FormLine: React.FC<IProps> = ({ config, handleChange }) => {
+const FormMultiLine: React.FC<IProps> = ({ config, handleChange }) => {
     return (
         <>
             <ProFormText
@@ -26,12 +26,12 @@ const FormLine: React.FC<IProps> = ({ config, handleChange }) => {
                 label="Device"
                 placeholder="Choose the best!"
                 initialValue={config.devid}
-                options={dataLine.map((dl) => ({
-                    value: dl.id,
-                    label: dl.name,
+                options={dataMultiLine.map((dml) => ({
+                    value: dml.id,
+                    label: dml.name,
                 }))}
                 onChange={(value) => {
-                    const valDevice = dataLine.find((dl) => dl.id === value);
+                    const valDevice = dataMultiLine.find((dml) => dml.id === value);
                     if (valDevice) {
                         handleChange('data', valDevice.value);
                         console.log(valDevice.value)
@@ -57,4 +57,4 @@ const FormLine: React.FC<IProps> = ({ config, handleChange }) => {
     );
 };
 
-export default FormLine;
+export default FormMultiLine;

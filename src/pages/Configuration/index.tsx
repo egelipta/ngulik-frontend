@@ -8,7 +8,7 @@ import {
     getAllDataApiV1HomeAssistantHomeassistantGetDataGet,
     homeAssistantDelApiV1HomeAssistantHomeassistantDelDataDelete
 } from '@/services/pjvms/homeAssistant';
-import { dataTunggal, dataLine, dataPie } from './Datas/data';
+import { dataTunggal, dataLine, dataPie, dataMultiLine } from './Datas/data';
 
 import TheComponent from './Components/theComponent';
 import SelectComponent from './View/select-component';
@@ -40,6 +40,7 @@ export default memo(() => {
         const singleValue = dataTunggal.find((dt) => dt.id === perangkatID);
         const lineValue = dataLine.find((dl) => dl.id === perangkatID);
         const pieValue = dataPie.find((dp) => dp.id === perangkatID);
+        const multiLine = dataMultiLine.find((dml) => dml.id === perangkatID);
 
         // if (!singleValue && tipe === 'ChartGauge') {
         //     return <div>Device data for ChartGauge not found</div>;
@@ -50,14 +51,25 @@ export default memo(() => {
             return <div>Unknown component tipe</div>;
         }
 
+        const getChartData = (tipe: string, values: any) => {
+            switch (tipe) {
+                case 'ChartLine':
+                case 'ChartArea':
+                case 'ChartColumn':
+                    return { data: values.lineValue?.value };
+                case 'ChartPie':
+                    return { data: values.pieValue?.value };
+                case 'ChartMultiLine':
+                case 'ChartRadar':
+                    return { data: values.multiLine?.value };
+                default:
+                    return { percent: values.singleValue?.value };
+            }
+        };
+
         return (
             <ChartComponent
-                {...(tipe === 'ChartLine'
-                    ? { data: lineValue?.value }
-                    : tipe === 'ChartPie'
-                        ? { data: pieValue?.value }
-                        : { percent: singleValue?.value })
-                }
+                {...getChartData(tipe, { lineValue, pieValue, multiLine, singleValue })}
                 unit={satuan}
                 {...dataData}
             />

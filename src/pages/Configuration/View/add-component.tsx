@@ -1,9 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
-import ProForm, { ModalForm } from '@ant-design/pro-form';
+import { ModalForm } from '@ant-design/pro-form';
 import { message, Row, Col } from 'antd';
 // import { dataLine } from '../datas';
 import { homeAssistantAddApiV1HomeAssistantHomeassistantAddDataPost } from '@/services/pjvms/homeAssistant';
-import ProCard from '@ant-design/pro-card';
 import { renderForm } from '../FormComponent/renderForm';
 
 
@@ -31,19 +30,21 @@ const AddComponent = memo(({ visible, onClose, SelectedComponent, reload }: IPro
 
     //config data default komponen
     const defaultConfig = {
-        name: type,
-        devid: null,
-        percent: 0,
-        data: [],
-        conditions: 'min',
-        color: getColor(type),
-        min: 0,
-        max: 100,
-        lower: 20,
-        normallower: 40,
-        normalupper: 60,
-        upper: 80,
-        unit: '%',
+        name: type, //all
+        devid: null, //gauge, line, liquid, ring, pie
+        percent: 0, //gauge, liquid, ring
+        conditions: 'min', //gauge
+        color: getColor(type), //gauge, liquid, ring
+        min: 0, //gauge
+        max: 100, //gauge
+        lower: 20, //gauge
+        normallower: 40, //gauge
+        normalupper: 60, //gauge
+        upper: 80, //gauge
+        unit: '%', //all
+        data: [], //pie, line
+        stepType: '', //line, multiline
+        shape: '', //liquid
     };
 
     // State untuk component config
@@ -54,6 +55,7 @@ const AddComponent = memo(({ visible, onClose, SelectedComponent, reload }: IPro
         setConfig(defaultConfig);
     }, [type]);
 
+    //update color untuk Gauge
     const updateColorByCondition = (condition: string) => {
         if (condition === 'min-max') {
             return ['#F4664A', '#FAAD14', '#30BF78', '#FAAD14', '#F4664A']; // 5 warna
@@ -108,6 +110,8 @@ const AddComponent = memo(({ visible, onClose, SelectedComponent, reload }: IPro
                 type: type ?? '',
                 unit: val.unit,
                 datas: {
+                    shape: val.shape,
+                    stepType: val.stepType,
                     color: config.color,
                     min: val.min,
                     max: val.max,
