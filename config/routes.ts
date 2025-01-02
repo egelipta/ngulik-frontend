@@ -224,6 +224,14 @@ export default [
     hideInMenu: false
   },
 
+  {
+    path: '/components',
+    name: 'Components',
+    icon: 'AppstoreAddOutlined',
+    component: './Komponen',
+    hideInMenu: false
+  },
+
   // {
   //   path: '/three-js',
   //   name: 'THREE JS',
